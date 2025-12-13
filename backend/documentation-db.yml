@@ -1,0 +1,82 @@
+$schema: https://patrickfust.github.io/documentation-generator/v5/documentation-schema.json
+databaseName: Network Simulator
+tables:
+  - name: general_configuration
+    comment: General configuration for the network simulator
+    fields:
+      - name: id
+        dataType: int
+        nullable: false
+        primaryKey: true
+        comment: Unique identifier of the general configuration. There is always only one row with id = 1.
+      - name: targetBaseUrl
+        dataType: text
+        nullable: false
+        comment: Base URL of the target system to which the network simulator will forward requests.
+      - name: timeoutMs
+        dataType: bigint
+        nullable: false
+        comment: Timeout in milliseconds for requests sent to the target system. Can be overridden per simulation.
+      - name: followRedirects
+        dataType: bool
+        nullable: false
+        comment: Whether the simulator should follow HTTP redirects when forwarding requests to the target system.
+      - name: created_at
+        dataType: timestamptz
+        nullable: false
+        comment: Timestamp when the configuration was created.
+      - name: updated_at
+        dataType: timestamptz
+        nullable: false
+        comment: Timestamp when the configuration was last updated.
+  - name: scenarios
+    fields:
+      - name: id
+        dataType: int
+        nullable: false
+        primaryKey: true
+        comment: Unique identifier of the scenario.
+      - name: enable_scenario
+        dataType: bool
+        nullable: false
+        comment: Whether the scenario is enabled.
+      - name: name
+        dataType: text
+        nullable: false
+        comment: Name of the scenario.
+      - name: path
+        dataType: text
+        nullable: true
+        comment: Path of the scenario to match incoming requests.
+      - name: description
+        dataType: text
+        nullable: true
+        comment: Description of the scenario.
+      - name: latency_ms
+        dataType: bigint
+        nullable: true
+        comment: Latency in milliseconds to introduce before responding.
+      - name: status_code
+        dataType: int
+        nullable: true
+        comment: HTTP status code to return in the response.
+      - name: response_body
+        dataType: text
+        nullable: true
+        comment: Body of the response to return.
+      - name: timeout_ms
+        dataType: bigint
+        nullable: true
+        comment: Timeout in milliseconds for this scenario.
+      - name: created_at
+        dataType: timestamptz
+        nullable: false
+        comment: Timestamp when the scenario was created.
+      - name: updated_at
+        dataType: timestamptz
+        nullable: false
+        comment: Timestamp when the scenario was last updated.
+      - name: follow_redirects
+        dataType: bool
+        nullable: true
+        comment: Whether to follow HTTP redirects for this scenario.

@@ -1,0 +1,9 @@
+- className: dk.fust.docgen.erdiagram.ERDiagramConfiguration
+  documentationFile: documentation-db.yml
+  umlGenerator: MERMAID
+  generateKeys:
+    - className: dk.fust.docgen.erdiagram.GenerateKey
+      destinationKey: ERD_NETWORK_SIMULATOR
+  destination:
+    className: dk.fust.docgen.destination.MarkdownDestination
+    file: README.md

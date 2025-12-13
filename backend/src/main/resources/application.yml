@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: Network Simulator
+
+  datasource:
+    url: jdbc:postgresql://localhost:5532/network_simulator
+    username: network_simulator_user
+    password: network_simulator_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 9898
+
+logging:
+  level:
+    com.scenariosimulator: DEBUG
+
+springdoc:
+  api-docs:
+    path: /_/api-docs
+  swagger-ui:
+    path: /_/index.html
