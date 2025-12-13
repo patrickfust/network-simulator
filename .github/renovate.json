@@ -1,0 +1,21 @@
+{
+  "baseBranches": [
+    "main"
+  ],
+  "rebaseWhen": "conflicted",
+  "labels": ["dependencies"],
+  "automergeStrategy": "merge-commit",
+  "ignoreTests": false,
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor"],
+      "automerge": true,
+      "pinDigests": true
+    }
+  ]
+}
