@@ -1,0 +1,26 @@
+<form [formGroup]="formGroup">
+  <ng-template matStepLabel>Status Code</ng-template>
+  <p>If status code is specified, the actual proxied server will not be called and the returned status code is the one you gave.</p>
+  <mat-form-field>
+    <mat-label>Status Code</mat-label>
+    <input matInput type="text" formControlName="statusCode" placeholder="Status Code to return">
+    @if (formGroup.get('statusCode')?.invalid && formGroup.get('statusCode')?.touched) {
+      <mat-error>{{ getErrorMessage('statusCode') }}</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Response Body</mat-label>
+    <textarea matInput rows="15" formControlName="responseBody"></textarea>
+    @if (formGroup.get('responseBody')?.invalid && formGroup.get('responseBody')?.touched) {
+      <mat-error>{{ getErrorMessage('responseBody') }}</mat-error>
+    }
+  </mat-form-field>
+
+  @if (formGroup.hasError('bodyWithoutStatusCode')) {
+    <mat-error>Response Body cannot be set without a Status Code</mat-error>
+  }
+  <div>
+    <button matButton matStepperPrevious>Back</button>
+<!--    <button matButton matStepperNext>Next</button>-->
+  </div>
+</form>

@@ -1,0 +1,55 @@
+<mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="basicInfoFormGroup">
+    <ng-template matStepLabel>Basic scenario information</ng-template>
+    <app-basic-info-step [formGroup]="basicInfoFormGroup" [parent]="this"></app-basic-info-step>
+  </mat-step>
+  <mat-step [stepControl]="networkFormGroup">
+    <ng-template matStepLabel>Network simulation</ng-template>
+    <app-network-step [formGroup]="networkFormGroup" [parent]="this"></app-network-step>
+  </mat-step>
+  <mat-step [stepControl]="statusCodeFormGroup">
+    <ng-template matStepLabel>Status Code</ng-template>
+    <app-status-code-step [formGroup]="statusCodeFormGroup" [parent]="this"></app-status-code-step>
+  </mat-step>
+</mat-stepper>
+
+@if (!(basicInfoFormGroup.valid && networkFormGroup.valid && statusCodeFormGroup.valid) &&
+    (basicInfoFormGroup.get('name')?.touched || basicInfoFormGroup.get('name')?.valid)) {
+  <mat-card class="requirement-not-met-card">
+      <h3 class="requirement-not-met">Not all required fields and validation are passed.</h3>
+      <mat-list>
+        @for (error of getFormErrors(); track error) {
+          <mat-list-item>
+            <mat-icon matListItemIcon class="warning-icon">error</mat-icon>
+            <div matListItemTitle>{{ error }}</div>
+          </mat-list-item>
+        }
+      </mat-list>
+  </mat-card>
+}
+
+<!-- Always-visible action bar -->
+<div class="scenario-actions">
+  <button matButton (click)="stepper.previous()">Back</button>
+  <button matButton (click)="stepper.reset()">Reset</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    [disabled]="basicInfoFormGroup.invalid || networkFormGroup.invalid || statusCodeFormGroup.invalid"
+    (click)="onSubmit()">
+    <mat-icon class="icon-left" aria-hidden="false" aria-label="Submit scenario">post_add</mat-icon>
+    {{ submitButtonText }}
+  </button>
+  <!-- Visible only if the parent bound (deleteScenarioSubmit) -->
+  @if (deleteScenarioSubmit.observed) {
+    <button
+      mat-raised-button
+      color="warn"
+      type="button"
+      (click)="showDeleteScenarioDialog()">
+      <mat-icon class="icon-left" aria-hidden="false" aria-label="Delete scenario">delete</mat-icon>
+      Delete Scenario
+    </button>
+  }
+</div>

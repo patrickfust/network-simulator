@@ -1,0 +1,41 @@
+<form [formGroup]="generalConfigForm" (ngSubmit)="onSubmit()">
+  <mat-card class="logo-card">
+    <mat-card-header>
+      <mat-card-title><h2 class="headline">Network Scenario Simulator</h2></mat-card-title>
+    </mat-card-header>
+    <img class="logo" mat-card-image src="assets/network-simulator-300.png" width="300" height="300" alt="Logo" />
+    <mat-card-content></mat-card-content>
+  </mat-card>
+  <mat-card class="welcome-card">
+    <h2>Welcome to the Network Scenario Simulator</h2>
+    Here, you can set up the general parameters for simulating various network scenarios. <br/>
+    Please fill in the required fields below to get started.
+  </mat-card>
+  <mat-form-field appearance="fill">
+    <mat-label>Target Base URL</mat-label>
+    <input matInput id="targetBaseUrl" formControlName="targetBaseUrl" type="text" />
+    <mat-hint>Base URL for the target</mat-hint>
+    @if (generalConfigForm.get('targetBaseUrl')?.hasError('required')) {
+      <mat-error>Target Base URL is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Timeout (ms)</mat-label>
+    <input matInput id="timeoutMs" formControlName="timeoutMs" type="number" />
+    @if (generalConfigForm.get('timeoutMs')?.hasError('required')) {
+      <mat-error>Timeout is required</mat-error>
+    }
+    @if (generalConfigForm.get('timeoutMs')?.hasError('min')) {
+      <mat-error>Timeout must be greater than 0</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-card class="follow-card">Should the system automatically follow redirects?</mat-card>
+  <mat-checkbox formControlName="followRedirect">Follow Redirect</mat-checkbox>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="generalConfigForm.invalid">
+    Save
+  </button>
+
+</form>

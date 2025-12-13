@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-card-header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.welcome-card {
+  padding: 16px;
+}
+.headline {
+  margin: 0;
+  padding: 0;
+}
+.follow-card {
+  padding: 16px;
+  margin-bottom: 0;
+}

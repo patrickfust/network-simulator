@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Scenario {{data.scenario.id}}</h2>
+<mat-dialog-content>
+  <table>
+    <tr>
+      <td class="title">Name:</td>
+      <td>{{data.scenario.name}}</td>
+    </tr>
+    <tr>
+      <td class="title">Description:</td>
+      <td>
+        @if (data.scenario.description) {
+          {{ data.scenario.description }}
+        } @else {
+          <span class="empty-description">No description</span>
+        }
+      </td>
+    </tr>
+    <tr>
+      <td class="title">Path:</td>
+      <td>
+        @if (data.scenario.path) {
+          {{ data.scenario.path }}
+        } @else {
+          <span class="empty-path">All paths</span>
+        }
+      </td>
+    </tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="onNoClick()">No Thanks</button>
+  <button matButton (click)="onYesClick()">
+    <mat-icon class="icon-left" aria-hidden="false" aria-label="Submit scenario">warning</mat-icon>
+    Yes delete the scenario
+  </button>
+</mat-dialog-actions>
+

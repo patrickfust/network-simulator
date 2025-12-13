@@ -1,0 +1,12 @@
+$spacing: 6px;
+
+/* vertical spacing after the toggle */
+mat-slide-toggle[formControlName="enableScenario"] {
+  display: inline-block;
+  margin-bottom: $spacing;
+  margin-top: $spacing;
+}
+
+.mat-stepper-vertical, .mat-mdc-form-field {
+  margin-top: $spacing;
+}

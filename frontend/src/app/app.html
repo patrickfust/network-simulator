@@ -1,0 +1,15 @@
+<main>
+  <mat-toolbar color="primary">
+    <a [routerLink]="['/']">
+      <header class="brand-name"><img class="brand-logo" ngSrc="assets/network-simulator-60.png" alt="logo"
+                                      aria-hidden="true" height="60" width="60" priority/>
+      </header>
+    </a>
+    <button mat-button [routerLink]="['/general-configuration']"><mat-icon aria-hidden="false" aria-label="View and modify the general configuration" fontIcon="admin_panel_settings"/>General Configuration</button>
+    <button mat-button [routerLink]="['/scenarios']"><mat-icon aria-hidden="false" aria-label="List scenarios" fontIcon="list"/>Scenarios</button>
+    <button mat-button [routerLink]="['/add-scenario']"><mat-icon aria-hidden="false" aria-label="Add scenario" fontIcon="add"/>Add scenario</button>
+  </mat-toolbar>
+  <section class="content">
+    <router-outlet/>
+  </section>
+</main>

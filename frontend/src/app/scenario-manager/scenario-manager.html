@@ -1,0 +1,67 @@
+<section class="results">
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
+    <ng-container matColumnDef="enableScenario">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Enabled
+      </th>
+      <td mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+        <mat-slide-toggle class="example-margin"
+                          [checked]="element.enableScenario"
+                          (change)="onToggleScenario(element, $event.checked)">
+        </mat-slide-toggle>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Id
+      </th>
+      <td mat-cell *matCellDef="let element">{{element.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+      <td mat-cell *matCellDef="let element">{{element.description}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="path">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Path</th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.path) {
+          {{ element.path }}
+        } @else {
+          <span class="empty-path">All paths</span>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="timeoutMs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Timeout (ms)</th>
+      <td mat-cell *matCellDef="let element">{{element.timeoutMs}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="statusCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status Code</th>
+      <td mat-cell *matCellDef="let element">{{element.statusCode}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="latencyMs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Latency (ms)</th>
+      <td mat-cell *matCellDef="let element">{{element.latencyMs}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)" class="clickable-row"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+</section>

@@ -1,0 +1,22 @@
+<form [formGroup]="formGroup">
+  <ng-template matStepLabel>Network simulation</ng-template>
+  <mat-form-field>
+    <mat-label>Latency (ms)</mat-label>
+    <input matInput type="text" formControlName="latencyMs" placeholder="Latency in milliseconds">
+    @if (formGroup.get('latencyMs')?.invalid && formGroup.get('latencyMs')?.touched) {
+      <mat-error>{{ getErrorMessage('latencyMs') }}</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Timeout (ms)</mat-label>
+    <input matInput type="text" formControlName="timeoutMs" placeholder="Timeout in milliseconds">
+    @if (formGroup.get('timeoutMs')?.invalid && formGroup.get('timeoutMs')?.touched) {
+      <mat-error>{{ getErrorMessage('timeoutMs') }}</mat-error>
+    }
+    <mat-hint>If empty, the timeout that is specified in general configuration applies.</mat-hint>
+  </mat-form-field>
+  <div>
+    <button matButton matStepperPrevious>Back</button>
+    <button matButton matStepperNext>Next</button>
+  </div>
+</form>

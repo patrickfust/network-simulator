@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+
+:host {
+  --content-padding: 10px;
+}
+
+header {
+  display: block;
+  //height: 51px;
+  padding: var(--content-padding);
+}
+.content {
+  padding: var(--content-padding);
+}
+
+mat-toolbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

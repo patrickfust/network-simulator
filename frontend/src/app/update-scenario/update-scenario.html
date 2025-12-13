@@ -1,0 +1,6 @@
+<div class="add-scenario-container">
+  <h2>Update Scenario</h2>
+  @if (scenario()) {
+    <app-scenario-form submitButtonText="Update Scenario" [scenario]="scenario()" (formSubmit)="onFormSubmit($event)" (deleteScenarioSubmit)="onDeleteSubmit($event)"></app-scenario-form>
+  }
+</div>

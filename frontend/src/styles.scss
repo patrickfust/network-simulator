@@ -1,0 +1,27 @@
+@use '@angular/material' as mat;
+@import 'material-icons/iconfont/material-icons.css';
+
+// core styles required by Angular Material
+@include mat.core();
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  //color-scheme: dark light;
+  @include mat.theme((
+    color: mat.$m2-blue-gray-palette,
+    typography: Roboto,
+    density: 0
+  ));
+}
+
+/* Global form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
