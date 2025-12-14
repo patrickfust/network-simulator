@@ -1,5 +1,5 @@
 ---
-name: Build Network Simulator
+name: Build Backend
 
 on: [push]
 
