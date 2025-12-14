@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "scenarios")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Scenario {
@@ -56,5 +55,18 @@ public class Scenario {
 
     @Column(name = "follow_redirects")
     private Boolean followRedirect = true;
+
+    public Scenario(Long id, boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String responseBody, Long timeoutMs, Boolean followRedirect) {
+        this.id = id;
+        this.enableScenario = enableScenario;
+        this.name = name;
+        this.path = path;
+        this.description = description;
+        this.latencyMs = latencyMs;
+        this.statusCode = statusCode;
+        this.responseBody = responseBody;
+        this.timeoutMs = timeoutMs;
+        this.followRedirect = followRedirect;
+    }
 
 }
