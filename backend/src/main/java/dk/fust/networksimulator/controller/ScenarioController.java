@@ -1,9 +1,12 @@
 package dk.fust.networksimulator.controller;
 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.net.URI;
 import dk.fust.networksimulator.model.Scenario;
 import dk.fust.networksimulator.service.ProxyService;
 import dk.fust.networksimulator.service.ScenarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +38,18 @@ public class ScenarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Create a scenario")
+    @Operation(summary = "Create a scenario",
+            responses = {@ApiResponse(responseCode = "201", description = "Scenario successfully created")})
     @PostMapping
-    public Scenario createScenario(@RequestBody Scenario scenario) {
+    public ResponseEntity<Scenario> createScenario(@RequestBody Scenario scenario) {
         scenario.setId(null); // Ensure ID is null for new entity
-        return scenarioService.createScenario(scenario);
+        Scenario createdScenario = scenarioService.createScenario(scenario);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(createdScenario.getId())
+            .toUri();
+        return ResponseEntity.created(location).body(createdScenario);
     }
 
     @Operation(summary = "Update a specific scenario")

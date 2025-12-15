@@ -9,11 +9,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "scenarios")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Scenario {
 
@@ -22,7 +25,7 @@ public class Scenario {
     private Long id;
 
     @Column(name = "enable_scenario")
-    private boolean enableScenario = true;
+    private Boolean enableScenario = true;
 
     @Column(nullable = false)
     private String name;
@@ -45,6 +48,12 @@ public class Scenario {
     @Column(name = "timeout_ms")
     private Long timeoutMs;
 
+    @Column(name = "follow_redirects")
+    private Boolean followRedirect;
+
+    @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScenarioHeader> headers = new ArrayList<>();
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,10 +62,7 @@ public class Scenario {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "follow_redirects")
-    private Boolean followRedirect = true;
-
-    public Scenario(Long id, boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String responseBody, Long timeoutMs, Boolean followRedirect) {
+    public Scenario(Long id, Boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String responseBody, Long timeoutMs, Boolean followRedirect) {
         this.id = id;
         this.enableScenario = enableScenario;
         this.name = name;

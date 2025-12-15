@@ -1,6 +1,6 @@
 import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {
-  AbstractControl,
+  AbstractControl, FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
@@ -17,6 +17,7 @@ import {StatusCodeStepComponent} from './status-code-step.component';
 import {MatCard} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteScenarioDialog} from './dialog-delete-scenario';
+import {HeadersStepComponent} from './headers-step.component';
 
 @Component({
   selector: 'app-scenario-form',
@@ -30,6 +31,7 @@ import {DeleteScenarioDialog} from './dialog-delete-scenario';
     MatListItem,
     StatusCodeStepComponent,
     MatCard,
+    HeadersStepComponent,
   ],
   templateUrl: './scenario-form.html',
   styleUrl: './scenario-form.scss',
@@ -45,6 +47,7 @@ export class ScenarioForm implements OnInit, OnChanges {
   basicInfoFormGroup: FormGroup;
   networkFormGroup: FormGroup;
   statusCodeFormGroup: FormGroup;
+  headerFormGroup: FormGroup;
   isLinear = false;
 
   constructor(private fb: FormBuilder) {
@@ -62,6 +65,9 @@ export class ScenarioForm implements OnInit, OnChanges {
       statusCode: ['', [Validators.min(100), Validators.max(599), Validators.pattern(/^\d+$/)]],
       responseBody: [''],
     }, {validators: this.statusCodeBodyValidator.bind(this)});
+    this.headerFormGroup = fb.group({
+      headers: this.fb.array([])
+    });
   }
 
   ngOnInit(): void {
@@ -99,19 +105,42 @@ export class ScenarioForm implements OnInit, OnChanges {
       statusCode: scenario.statusCode ?? '',
       responseBody: scenario.responseBody ?? '',
     }, {emitEvent: false});
+
+    // Clear and populate headers
+    const headersArray = this.headerFormGroup.get('headers') as FormArray;
+    headersArray.clear();
+    if (scenario.headers && scenario.headers.length > 0) {
+      scenario.headers.forEach(header => {
+        headersArray.push(this.fb.group({
+          id: [header.id],
+          headerName: [header.headerName || '', Validators.required],
+          headerValue: [header.headerValue || '', Validators.required],
+          headerReplaceValue: [header.headerReplaceValue || ''],
+        }));
+      });
+    }
+  }
+
+  isFormsValid(): boolean {
+    return this.basicInfoFormGroup.valid &&
+      this.networkFormGroup.valid &&
+      this.headerFormGroup.valid &&
+      this.statusCodeFormGroup.valid;
   }
 
   onSubmit(): void {
-    if (this.basicInfoFormGroup.valid && this.networkFormGroup.valid) {
+    if (this.basicInfoFormGroup.valid && this.networkFormGroup.valid && this.headerFormGroup.valid) {
       const basic = this.basicInfoFormGroup.value;
       const network = this.networkFormGroup.value;
       const statusCode = this.statusCodeFormGroup.value;
+      const headers = this.headerFormGroup.value.headers || [];
 
       const scenario: Scenario = {
         id: this.scenario?.id,
         ...basic,
         ...network,
         ...statusCode,
+        headers,
         latencyMs: network.latencyMs !== '' && network.latencyMs != null ? Number(network.latencyMs) : undefined,
         timeoutMs: network.timeoutMs !== '' && network.timeoutMs != null ? Number(network.timeoutMs) : undefined,
       };
@@ -128,6 +157,7 @@ export class ScenarioForm implements OnInit, OnChanges {
     this.checkForErrors('Basic scenario information', this.basicInfoFormGroup, errors);
     this.checkForErrors('Network simulation', this.networkFormGroup, errors);
     this.checkForErrors('Status Code', this.statusCodeFormGroup, errors);
+    this.checkForErrors('Headers', this.headerFormGroup, errors);
     return errors;
   }
 
@@ -143,7 +173,32 @@ export class ScenarioForm implements OnInit, OnChanges {
     // Check control level errors
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
-      if (control?.errors) {
+
+      // Handle FormArray
+      if (control instanceof FormArray) {
+        control.controls.forEach((formGroup, index) => {
+          if (formGroup.errors) {
+            Object.keys(formGroup.errors).forEach(errorKey => {
+              const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
+              errors.push(`${groupName} [${index + 1}]: ${message}`);
+            });
+          }
+
+          // Check individual controls within the FormGroup
+          if (formGroup instanceof FormGroup) {
+            Object.keys(formGroup.controls).forEach(fieldKey => {
+              const fieldControl = formGroup.get(fieldKey);
+              if (fieldControl?.errors) {
+                Object.keys(fieldControl.errors).forEach(errorKey => {
+                  const message = this.getErrorMessage(fieldKey, errorKey, fieldControl.errors![errorKey]);
+                  errors.push(`${groupName} [${index + 1}]: ${message}`);
+                });
+              }
+            });
+          }
+        });
+      } else if (control?.errors) {
+        // Regular control
         Object.keys(control.errors).forEach(errorKey => {
           const message = this.getErrorMessage(key, errorKey, control.errors![errorKey]);
           errors.push(`${groupName}: ${message}`);
@@ -181,6 +236,10 @@ export class ScenarioForm implements OnInit, OnChanges {
       'timeoutMs': 'Timeout (ms)',
       'statusCode': 'Status Code',
       'responseBody': 'Response Body',
+      'headers': 'Headers',
+      'headerName': 'Header Name',
+      'headerValue': 'Header Value',
+      'headerReplaceValue': 'Replace existing header',
     };
 
     return labels[fieldName] || fieldName;

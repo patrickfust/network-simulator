@@ -1,0 +1,10 @@
+.header-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.header-row mat-form-field {
+  flex: 1;
+}

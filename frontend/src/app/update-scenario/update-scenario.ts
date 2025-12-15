@@ -46,17 +46,19 @@ export class UpdateScenario {
 
   onDeleteSubmit(scenario: Scenario): void {
     console.log('Scenario to delete:', scenario);
-    this.scenarioService.deleteScenarioById(this.scenario()!.id).subscribe({
-      next: () => {
-        this.snackBar.open('Scenario deleted', 'Close', {duration: 3000});
-        this.router.navigate(['/scenarios']);
-      },
-      error: (err: Error) => {
-        console.error('Delete failed:', err);
-        this.snackBar.open(err.message, 'Close', {duration: 5000});
-      },
-    });
-
+    const id = this.scenario()?.id;
+    if (id !== undefined) {
+      this.scenarioService.deleteScenarioById(id).subscribe({
+        next: () => {
+          this.snackBar.open('Scenario deleted', 'Close', {duration: 3000});
+          this.router.navigate(['/scenarios']);
+        },
+        error: (err: Error) => {
+          console.error('Delete failed:', err);
+          this.snackBar.open(err.message, 'Close', {duration: 5000});
+        },
+      });
+    }
   }
 
 }

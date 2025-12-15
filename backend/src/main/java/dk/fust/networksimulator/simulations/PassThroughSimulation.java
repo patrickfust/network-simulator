@@ -18,15 +18,18 @@ public class PassThroughSimulation implements Simulation {
 
     @Override
     public void doSimulation(ProxyRequest proxyRequest, ProxyResponse proxyResponse, SimulationChain chain) throws IOException {
-        log.info("Passing through request to target application: {} {}", proxyRequest.getMethod(), proxyRequest.getPath());
-        proxyService.sendRequest(proxyRequest, proxyResponse);
+        // Check that a previous simulation hasn't already set a response
+        if (proxyResponse.getStatusCode() == null) {
+            log.info("Passing through request to target application: {} {}", proxyRequest.getMethod(), proxyRequest.getPath());
+            proxyService.sendRequest(proxyRequest, proxyResponse);
+        }
         chain.doSimulation(proxyRequest, proxyResponse);
     }
 
     @Override
     public int getOrder() {
         // Must be last in the chain
-        return Integer.MAX_VALUE;
+        return Integer.MAX_VALUE - 1; // Just before HeaderSimulation
     }
 
 }

@@ -20,7 +20,7 @@ describe('ScenarioManager', () => {
   let snackBar: MatSnackBar;
 
   const scenarios: Scenario[] = [
-    {id: 1, name: 'A', description: '', path: '/', timeoutMs: 0, followRedirect: true, statusCode: 200, responseBody: 'abc', latencyMs: 0, enableScenario: false}
+    {id: 1, name: 'A', description: '', path: '/', timeoutMs: 0, followRedirect: true, statusCode: 200, responseBody: 'abc', latencyMs: 0, enableScenario: false, headers: []},
   ];
 
   beforeEach(async () => {
@@ -76,9 +76,14 @@ describe('ScenarioManager', () => {
     const s = { ...scenarios[0], enableScenario: false };
     component.dataSource.data = [s];
     mockService.updateScenario.and.returnValue(throwError(() => new Error('fail')));
+
+    // Suppress console.error for this test
+    spyOn(console, 'error');
+
     component.onToggleScenario(s, true);
     expect(mockService.updateScenario).toHaveBeenCalled();
     expect(s.enableScenario).toBe(false); // reverted to !event
     expect(snackBar.open).toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalled(); // Optional: verify error was logged
   });
 });

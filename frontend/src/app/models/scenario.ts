@@ -1,3 +1,10 @@
+export interface ScenarioHeader {
+  id?: number;
+  headerName: string;
+  headerValue: string;
+  headerReplaceValue: boolean;
+}
+
 export interface Scenario {
   id: number;
   enableScenario: boolean;
@@ -9,5 +16,5 @@ export interface Scenario {
   responseBody : string;
   timeoutMs: number;
   followRedirect: boolean;
-
+  headers: ScenarioHeader[];
 }

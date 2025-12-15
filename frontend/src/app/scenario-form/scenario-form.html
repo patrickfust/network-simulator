@@ -7,13 +7,17 @@
     <ng-template matStepLabel>Network simulation</ng-template>
     <app-network-step [formGroup]="networkFormGroup" [parent]="this"></app-network-step>
   </mat-step>
+  <mat-step [stepControl]="headerFormGroup">
+    <ng-template matStepLabel>Headers</ng-template>
+    <app-headers-step [formGroup]="headerFormGroup" [parent]="this"></app-headers-step>
+  </mat-step>
   <mat-step [stepControl]="statusCodeFormGroup">
     <ng-template matStepLabel>Status Code</ng-template>
     <app-status-code-step [formGroup]="statusCodeFormGroup" [parent]="this"></app-status-code-step>
   </mat-step>
 </mat-stepper>
 
-@if (!(basicInfoFormGroup.valid && networkFormGroup.valid && statusCodeFormGroup.valid) &&
+@if (!isFormsValid() &&
     (basicInfoFormGroup.get('name')?.touched || basicInfoFormGroup.get('name')?.valid)) {
   <mat-card class="requirement-not-met-card">
       <h3 class="requirement-not-met">Not all required fields and validation are passed.</h3>

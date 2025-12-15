@@ -21,6 +21,7 @@ public class SimulatorService {
         for (Scenario scenario : scenarios) {
             addLatencySimulation(scenario, simulationChainDecorator);
             addStatusCodeSimulation(scenario, simulationChainDecorator);
+            addHeaderSimulation(scenario, simulationChainDecorator);
         }
 
         return simulationChainDecorator;
@@ -46,4 +47,14 @@ public class SimulatorService {
         }
     }
 
+    private static void addHeaderSimulation(Scenario scenario, SimulationChainDecorator simulationChainDecorator) {
+        if (scenario.getHeaders() != null && !scenario.getHeaders().isEmpty()) {
+            HeaderSimulation headerSimulation = (HeaderSimulation) simulationChainDecorator.getSimulationOfClass(HeaderSimulation.class);
+            if (headerSimulation == null) {
+                headerSimulation = new HeaderSimulation();
+                simulationChainDecorator.addSimulation(headerSimulation);
+            }
+            headerSimulation.addHeaders(scenario.getHeaders());
+        }
+    }
 }
