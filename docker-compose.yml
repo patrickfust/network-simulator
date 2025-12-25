@@ -1,0 +1,38 @@
+name: network-simulator
+services:
+  app:
+    image: patrickfust/network-simulator:latest
+    ports:
+      - "9898:9898"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JDBC_URL: jdbc:postgresql://db:5432/network_simulator
+      JDBC_USERNAME: network_simulator_user
+      JDBC_PASSWORD: network_simulator_password
+      DDL_AUTO: update
+      SHOW_SQL: false
+    depends_on:
+      - db
+    networks:
+      - network-simulator-network
+
+  db:
+    image: postgres:18.1
+    container_name: network-simulator-db
+    environment:
+      POSTGRES_DB: network_simulator
+      POSTGRES_USER: network_simulator_user
+      POSTGRES_PASSWORD: network_simulator_password
+    ports:
+      - "5535:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - network-simulator-network
+
+volumes:
+  postgres_data:
+
+networks:
+  network-simulator-network:
+    driver: bridge
