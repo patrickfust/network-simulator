@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18.1
+    container_name: db-local
+    environment:
+      POSTGRES_DB: network_simulator
+      POSTGRES_USER: network_simulator_user
+      POSTGRES_PASSWORD: network_simulator_password
+    ports:
+      - "5532:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
+    networks:
+      - network-simulator-network-local
+
+volumes:
+  postgres_data:
+
+networks:
+  network-simulator-network-local:
+    driver: bridge
