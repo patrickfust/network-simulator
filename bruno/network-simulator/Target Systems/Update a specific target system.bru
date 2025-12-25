@@ -1,0 +1,25 @@
+meta {
+  name: Update a specific target system
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/v1/target-systems/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "id": 0,
+    "systemName": "",
+    "targetBaseUrl": "",
+    "timeoutMs": 0,
+    "followRedirect": false
+  }
+}

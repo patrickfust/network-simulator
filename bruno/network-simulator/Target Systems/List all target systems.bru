@@ -1,0 +1,11 @@
+meta {
+  name: List all target systems
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/target-systems
+  body: none
+  auth: inherit
+}

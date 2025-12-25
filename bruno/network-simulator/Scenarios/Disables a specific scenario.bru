@@ -1,0 +1,15 @@
+meta {
+  name: Disables a specific scenario
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/scenarios/:id/deactivate
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: 
+}

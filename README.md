@@ -187,4 +187,21 @@ Read more about the backend and how it works [here](backend)
 
 Read more about the frontend and how it works [here](backend)
 
+# Bruno
+
+If you haven't cloned the network-simulator git repository, you can do so by clicking the button below.
+
+[<img src="https://fetch.usebruno.com/button.svg" alt="Fetch in Bruno" style="width: 130px; height: 30px;" width="128" height="32">](https://fetch.usebruno.com?url=git%40github.com%3Apatrickfust%2Fnetwork-simulator.git "target=_blank rel=noopener noreferrer")
+
+The Bruno collections are located in the `bruno` folder.
+
+## Generating Bruno collections
+
+If you want to generate the Bruno collections yourself, you can do so from the OpenAPI specification.
+
+1. Install [Bruno CLI](https://www.usebruno.com/docs/cli/installation)
+2. Start by downloading the OpenAPI specification from `http://localhost:9898/v3/api-docs` and save it as `network-simulator.json`
+3. Run the following command to import the OpenAPI specification and generate the Bruno collection:
+`bru import openapi --source network-simulator.json --output=bruno/network-simulator`
+
 [^1]: Feature is planned but not yet implemented.

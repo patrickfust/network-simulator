@@ -1,0 +1,38 @@
+meta {
+  name: Update a specific scenario
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/v1/scenarios/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 
+}
+
+body:json {
+  {
+    "id": 0,
+    "enableScenario": false,
+    "name": "",
+    "path": "",
+    "description": "",
+    "latencyMs": 0,
+    "statusCode": 0,
+    "responseBody": "",
+    "timeoutMs": 0,
+    "followRedirect": false,
+    "headers": [
+      {
+        "id": 0,
+        "headerName": "",
+        "headerValue": "",
+        "headerReplaceValue": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Network Simulator API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

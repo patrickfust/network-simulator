@@ -1,0 +1,15 @@
+meta {
+  name: Get a specific target system, by name
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/target-systems/name/:systemName
+  body: none
+  auth: inherit
+}
+
+params:path {
+  systemName: 
+}

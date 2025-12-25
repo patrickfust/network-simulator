@@ -1,0 +1,21 @@
+meta {
+  name: Create a target system
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/target-systems
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": 0,
+    "systemName": "",
+    "targetBaseUrl": "",
+    "timeoutMs": 0,
+    "followRedirect": false
+  }
+}
