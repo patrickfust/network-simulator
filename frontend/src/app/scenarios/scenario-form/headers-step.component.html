@@ -1,0 +1,32 @@
+<form [formGroup]="formGroup">
+  <ng-template matStepLabel>Headers</ng-template>
+
+  <div formArrayName="headers">
+    <h3>Headers</h3>
+    <div *ngFor="let header of headers.controls; let i = index" [formGroupName]="i" class="header-row">
+      <mat-form-field>
+        <mat-label>Header Name</mat-label>
+        <input matInput formControlName="headerName" placeholder="Content-Type">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Header Value</mat-label>
+        <input matInput formControlName="headerValue" placeholder="application/json">
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="headerReplaceValue">Replace value</mat-slide-toggle>
+
+      <button mat-icon-button (click)="removeHeader(i)" type="button">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <button mat-raised-button (click)="addHeader()" type="button">
+      <mat-icon>add</mat-icon>Add Header
+    </button>
+  </div>
+  <div>
+    <button matButton matStepperPrevious>Back</button>
+    <button matButton matStepperNext>Next</button>
+  </div>
+</form>

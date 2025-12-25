@@ -1,0 +1,21 @@
+<main>
+  <mat-toolbar color="primary" class="top-toolbar" role="navigation">
+    <a [routerLink]="['/']">
+      <header class="brand-name">
+        <img class="brand-logo" ngSrc="assets/network-simulator-60.png" alt="logo" aria-hidden="true" height="60" width="60" priority />
+      </header>
+    </a>
+    <button [matButton]="isActive('/home') ? 'filled' : 'text'" [routerLink]="['/home']" routerLinkActive="mat-button-filled">
+      <mat-icon aria-hidden="false" aria-label="Welcome" fontIcon="admin_panel_settings"></mat-icon>Welcome
+    </button>
+    <button [matButton]="isActive('/target-systems') ? 'filled' : 'text'" [routerLink]="['/target-systems']">
+      <mat-icon aria-hidden="false" aria-label="List target systems" fontIcon="list"></mat-icon>Target Systems
+    </button>
+    <button [matButton]="isActive('/scenarios') ? 'filled' : 'text'" [routerLink]="['/scenarios']">
+      <mat-icon aria-hidden="false" aria-label="List scenarios" fontIcon="list"></mat-icon>Scenarios
+    </button>
+  </mat-toolbar>
+  <section class="content">
+    <router-outlet></router-outlet>
+  </section>
+</main>

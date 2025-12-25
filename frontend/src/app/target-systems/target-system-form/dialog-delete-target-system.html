@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Target System {{data.targetSystem.id}}</h2>
+<mat-dialog-content>
+  <table>
+    <tr>
+      <td class="title">System Name:</td>
+      <td>{{data.targetSystem.systemName}}</td>
+    </tr>
+    <tr>
+      <td class="title">Target Base URL:</td>
+      <td>{{ data.targetSystem.targetBaseUrl }}</td>
+    </tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="onNoClick()">No Thanks</button>
+  <button matButton (click)="onYesClick()">
+    <mat-icon class="icon-left" aria-hidden="false" aria-label="Submit scenario">warning</mat-icon>
+    Yes delete the scenario
+  </button>
+</mat-dialog-actions>
+

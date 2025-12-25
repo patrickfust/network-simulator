@@ -1,0 +1,73 @@
+<form [formGroup]="targetSystemForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill">
+    <mat-label>System Name</mat-label>
+    <input matInput id="systemName" formControlName="systemName" type="text" />
+    <mat-hint>System Name is used in the URL you need when changing your base URL</mat-hint>
+    @if (targetSystemForm.get('systemName')?.hasError('required')) {
+      <mat-error>System Name is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Target Base URL</mat-label>
+    <input matInput id="targetBaseUrl" formControlName="targetBaseUrl" type="text" />
+    <mat-hint>Base URL for the target</mat-hint>
+    @if (targetSystemForm.get('targetBaseUrl')?.hasError('required')) {
+      <mat-error>Target Base URL is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Timeout (ms)</mat-label>
+    <input matInput id="timeoutMs" formControlName="timeoutMs" type="number" />
+    @if (targetSystemForm.get('timeoutMs')?.hasError('required')) {
+      <mat-error>Timeout is required</mat-error>
+    }
+    @if (targetSystemForm.get('timeoutMs')?.hasError('min')) {
+      <mat-error>Timeout must be greater than 0</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-card class="follow-card">Should the system automatically follow redirects?</mat-card>
+  <mat-slide-toggle formControlName="followRedirect">Follow Redirect</mat-slide-toggle>
+
+  @if (!isFormsValid() &&
+  (targetSystemForm.get('systemName')?.touched || targetSystemForm.get('systemName')?.valid)) {
+    <mat-card class="requirement-not-met-card">
+      <h3 class="requirement-not-met">Not all required fields and validation are passed.</h3>
+      <mat-list>
+        @for (error of getFormErrors(); track error) {
+          <mat-list-item>
+            <mat-icon matListItemIcon class="warning-icon">error</mat-icon>
+            <div matListItemTitle>{{ error }}</div>
+          </mat-list-item>
+        }
+      </mat-list>
+    </mat-card>
+  }
+
+  <!-- Always-visible action bar -->
+  <div class="scenario-actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      [disabled]="targetSystemForm.invalid"
+      (click)="onSubmit()">
+      <mat-icon class="icon-left" aria-hidden="false" aria-label="Submit target system">post_add</mat-icon>
+      {{ submitButtonText }}
+    </button>
+    <!-- Visible only if the parent bound (deleteScenarioSubmit) -->
+    @if (deleteTargetSystemSubmit.observed) {
+      <button
+        mat-raised-button
+        color="warn"
+        type="button"
+        (click)="showDeleteTargetSystemDialog()">
+        <mat-icon class="icon-left" aria-hidden="false" aria-label="Delete target system">delete</mat-icon>
+        Delete Target System
+      </button>
+    }
+  </div>
+
+</form>

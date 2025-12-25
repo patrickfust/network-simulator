@@ -1,0 +1,6 @@
+<div class="udpate-scenario-container">
+  <h2>Update Target System</h2>
+  @if (targetSystem()) {
+    <app-target-system-form submitButtonText="Update Target System" [targetSystem]="targetSystem()" (formSubmit)="onFormSubmit($event)" (deleteTargetSystemSubmit)="onDeleteSubmit($event)"></app-target-system-form>
+  }
+</div>

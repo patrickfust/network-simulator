@@ -1,0 +1,46 @@
+<section class="results">
+  <h1>Target System Manager</h1>
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. localhost" #input>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort (matSortChange)="announceSortChange($event)">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Id
+      </th>
+      <td mat-cell *matCellDef="let element">{{element.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="systemName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>System Name</th>
+      <td mat-cell *matCellDef="let targetSystem">{{ targetSystem.systemName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="targetBaseUrl">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Target Base URL</th>
+      <td mat-cell *matCellDef="let targetSystem">{{ targetSystem.targetBaseUrl }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timeoutMs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Timeout (ms)</th>
+      <td mat-cell *matCellDef="let targetSystem">{{ targetSystem.timeoutMs }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="followRedirect">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Follow Redirects</th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.followRedirect) {
+          <mat-icon>check</mat-icon>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="clickable-row" (click)="onRowClick(row)"></tr>
+  </table>
+</section>
+<section>
+  <button mat-raised-button [routerLink]="['/add-target-system']"><mat-icon aria-hidden="false" aria-label="Add target systen" fontIcon="add"/>Add target system</button>
+</section>

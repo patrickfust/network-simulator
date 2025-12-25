@@ -1,0 +1,23 @@
+mat-icon[matListItemIcon] {
+  vertical-align: middle;
+}
+mat-list-item {
+  align-items: center;
+}
+.requirement-not-met {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+.requirement-not-met-card {
+  border: solid 1px rgb(186, 26, 26);
+  margin-bottom: 10px;
+  mat-list {
+    color: rgb(186, 26, 26);
+    mat-icon {
+      padding-right: 5px;
+    }
+  }
+}
+button {
+  margin: 5px;
+}

@@ -1,0 +1,25 @@
+<form [formGroup]="formGroup">
+  <mat-slide-toggle formControlName="enableScenario">Enable scenario</mat-slide-toggle>
+  <br/>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" required />
+    @if (formGroup.get('name')?.invalid && formGroup.get('name')?.touched) {
+      <mat-error>{{getErrorMessage('name')}}</mat-error>
+    }
+  </mat-form-field>
+  <br/>
+  <mat-form-field>
+    <mat-label>Path</mat-label>
+    <input matInput formControlName="path" />
+    <mat-hint>Can be empty (all paths) or use regex like /api/*</mat-hint>
+  </mat-form-field>
+  <br/>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput formControlName="description" />
+  </mat-form-field>
+  <div>
+    <button matButton matStepperNext>Next</button>
+  </div>
+</form>

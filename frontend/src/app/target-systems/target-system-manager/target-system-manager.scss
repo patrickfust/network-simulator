@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-enableScenario {
+  max-width: 95px;
+  width: 100px;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.empty-path {
+  font-style: italic;
+}
+section {
+  padding-bottom: 20px;
+}
