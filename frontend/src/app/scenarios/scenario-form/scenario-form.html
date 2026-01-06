@@ -1,7 +1,12 @@
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
   <mat-step [stepControl]="basicInfoFormGroup">
     <ng-template matStepLabel>Basic scenario information</ng-template>
-    <app-basic-info-step [formGroup]="basicInfoFormGroup" [parent]="this"></app-basic-info-step>
+    <app-basic-info-step
+      [formGroup]="basicInfoFormGroup"
+      [parent]="this"
+      [targetSystems]="targetSystems">
+    </app-basic-info-step>
+
   </mat-step>
   <mat-step [stepControl]="networkFormGroup">
     <ng-template matStepLabel>Network simulation</ng-template>

@@ -18,6 +18,8 @@ import {MatCard} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteScenarioDialog} from './dialog-delete-scenario';
 import {HeadersStepComponent} from './headers-step.component';
+import {TargetSystemService} from '../../services/target-system.service';
+import {TargetSystem} from '../../models/target-system';
 
 @Component({
   selector: 'app-scenario-form',
@@ -38,6 +40,7 @@ import {HeadersStepComponent} from './headers-step.component';
 })
 export class ScenarioForm implements OnInit, OnChanges {
   readonly dialog = inject(MatDialog);
+  targetSystemService = inject(TargetSystemService);
 
   @Input() scenario?: Scenario;
   @Input() submitButtonText: string = 'Submit';
@@ -49,10 +52,12 @@ export class ScenarioForm implements OnInit, OnChanges {
   statusCodeFormGroup: FormGroup;
   headerFormGroup: FormGroup;
   isLinear = false;
+  targetSystems: TargetSystem[] = [];
 
   constructor(private fb: FormBuilder) {
     this.basicInfoFormGroup = fb.group({
       name: ['', Validators.required],
+      targetSystemId: [null],
       path: [''],
       description: [''],
       enableScenario: [true],
@@ -71,10 +76,17 @@ export class ScenarioForm implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this.scenario) {
-      this.populateForm(this.scenario);
-    }
-  }
+    this.targetSystemService.getAllTargetSystems().subscribe({
+      next: (systems) => {
+        this.targetSystems = systems;
+        if (this.scenario) {
+          this.populateForm(this.scenario);
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load target systems', err);
+      }
+    });  }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Only patch if forms are initialized and we have a valid scenario
@@ -91,6 +103,7 @@ export class ScenarioForm implements OnInit, OnChanges {
 
     this.basicInfoFormGroup.patchValue({
       name: scenario.name || '',
+      targetSystemId: scenario.targetSystemId ?? null,
       path: scenario.path || '',
       description: scenario.description || '',
       enableScenario: scenario.enableScenario ?? true,

@@ -22,8 +22,8 @@ public class ScenarioService {
         return scenarioRepository.findById(id);
     }
 
-    public Optional<List<Scenario>> findScenariosByPath(String path) {
-        return scenarioRepository.findScenariosByPath(path);
+    public Optional<List<Scenario>> findScenariosByPath(String path, Long targetSystemId) {
+        return scenarioRepository.findScenariosByPath(path, targetSystemId);
     }
 
     public Scenario createScenario(Scenario scenario) {
@@ -46,6 +46,7 @@ public class ScenarioService {
         scenario.setResponseBody(scenarioDetails.getResponseBody());
         scenario.setTimeoutMs(scenarioDetails.getTimeoutMs());
         scenario.setFollowRedirect(scenarioDetails.getFollowRedirect());
+        scenario.setTargetSystem(scenarioDetails.getTargetSystem());
         updateHeaders(scenarioDetails, scenario);
         return scenarioRepository.save(scenario);
     }

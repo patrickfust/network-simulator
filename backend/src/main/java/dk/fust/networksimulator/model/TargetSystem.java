@@ -1,7 +1,6 @@
 package dk.fust.networksimulator.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "target_systems")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class TargetSystem {
 
     @Id

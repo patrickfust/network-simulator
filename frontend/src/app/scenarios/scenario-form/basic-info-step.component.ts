@@ -5,6 +5,8 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatError, MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {ScenarioForm} from './scenario-form';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {TargetSystem} from '../../models/target-system';
 
 @Component({
   selector: 'app-basic-info-step',
@@ -19,12 +21,15 @@ import {ScenarioForm} from './scenario-form';
     ReactiveFormsModule,
     MatError,
     MatButton,
-    MatStepperNext
+    MatStepperNext,
+    MatSelect,
+    MatOption
   ]
 })
 export class BasicInfoStepComponent {
   @Input() formGroup!: FormGroup;
   @Input() parent!: ScenarioForm;
+  @Input() targetSystems: TargetSystem[] = [];
 
   getErrorMessage(fieldName: string): string {
     const control = this.formGroup.get(fieldName);

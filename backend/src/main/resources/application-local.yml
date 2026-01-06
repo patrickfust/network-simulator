@@ -1,3 +1,9 @@
+logging:
+  level:
+    dk:
+      fust:
+        networksimulator: debug
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5532/network_simulator

@@ -47,7 +47,8 @@ class ScenarioControllerSpec extends Specification {
 
     def "update scenario"() {
         given:
-        Scenario scenario = new Scenario([name: "Updated", path: "/update", description: "desc", latencyMs: 50, statusCode: 201, responseBody: "body", timeoutMs: 200, followRedirect: false])
+        Scenario scenario = new Scenario([id: scenarioId, name: "Updated", path: "/update", description: "desc",
+                                          latencyMs: 50, statusCode: 201, responseBody: "body", timeoutMs: 200, followRedirect: false])
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.
@@ -62,7 +63,7 @@ class ScenarioControllerSpec extends Specification {
 
     def "update scenario with headers"() {
         given:
-        def scenario = [name: "With Headers", path: "/headers", description: "desc",
+        def scenario = [id: scenarioId, name: "With Headers", path: "/headers", description: "desc",
                         headers: [[headerName: "X-Test", headerValue: "123", headerReplaceValue: true],
                                   [headerName: "Y-Test", headerValue: "456", headerReplaceValue: false]]]
 
@@ -85,7 +86,7 @@ class ScenarioControllerSpec extends Specification {
 
     def "update scenario with headers - remove one and add one"() {
         given:
-        def scenario = [name: "With Headers", path: "/headers", description: "desc",
+        def scenario = [id: scenarioId, name: "With Headers", path: "/headers", description: "desc",
                         headers: [[headerName: "X-Test", headerValue: "123", headerReplaceValue: false],
                                   [headerName: "YZ-Test", headerValue: "789", headerReplaceValue: true]]]
 
