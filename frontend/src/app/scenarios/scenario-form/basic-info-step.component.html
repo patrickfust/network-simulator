@@ -10,9 +10,20 @@
   </mat-form-field>
   <br/>
   <mat-form-field>
+    <mat-label>Target System</mat-label>
+    <mat-select formControlName="targetSystemId">
+      <mat-option [value]="null">All targets</mat-option>
+      @for (system of targetSystems; track system.id) {
+        <mat-option [value]="system.id">{{system.systemName}}</mat-option>
+      }
+    </mat-select>
+    <mat-hint>Optional - leave empty for all target systems</mat-hint>
+  </mat-form-field>
+  <br/>
+  <mat-form-field>
     <mat-label>Path</mat-label>
     <input matInput formControlName="path" />
-    <mat-hint>Can be empty (all paths) or use regex like /api/*</mat-hint>
+    <mat-hint>Optional - can be empty (all paths) or use regex like /api/*</mat-hint>
   </mat-form-field>
   <br/>
   <mat-form-field>

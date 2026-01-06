@@ -70,7 +70,36 @@ export class ScenarioService {
         return throwError(() => new Error(message));
       })
     );
+  }
 
+  activateScenarioById(id: number) {
+    console.log(`Activating Scenario ${id}`);
+    const activateUrl = `${this.apiUrl}/${id}/activate`;
+    return this.http.get<Scenario>(activateUrl, {}).pipe(
+      tap((res) => console.log('activate success', res)),
+      catchError((err) => {
+        console.error('Activate scenario failed', err);
+        // Normalize error message for the component
+        const message =
+          err?.error?.message || err?.message || 'Failed to activate scenario';
+        return throwError(() => new Error(message));
+      })
+    );
+  }
+
+  deactivateScenarioById(id: number) {
+    console.log(`Deactivating Scenario ${id}`);
+    const deactivateUrl = `${this.apiUrl}/${id}/deactivate`;
+    return this.http.get<Scenario>(deactivateUrl, {}).pipe(
+      tap((res) => console.log('deactivate success', res)),
+      catchError((err) => {
+        console.error('Deactivate scenario failed', err);
+        // Normalize error message for the component
+        const message =
+          err?.error?.message || err?.message || 'Failed to deactivate scenario';
+        return throwError(() => new Error(message));
+      })
+    );
   }
 
 }

@@ -2,7 +2,6 @@ package dk.fust.networksimulator.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import lombok.ToString;
 @Table(name = "scenario_headers")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(exclude = "scenario")
 public class ScenarioHeader {
 

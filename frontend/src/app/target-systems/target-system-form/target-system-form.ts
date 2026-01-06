@@ -2,7 +2,6 @@ import {Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges} f
 import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TargetSystemService} from '../../services/target-system.service';
 import {TargetSystem} from '../../models/target-system';
 import {materialImports} from '../../shared/material-imports';
 import {MatList, MatListItem} from '@angular/material/list';
@@ -30,7 +29,6 @@ export class TargetSystemForm implements OnInit {
   @Output() deleteTargetSystemSubmit = new EventEmitter<TargetSystem>();
 
   targetSystemForm: FormGroup;
-  targetSystemService = inject(TargetSystemService);
 
   constructor(private fb: FormBuilder) {
     this.targetSystemForm = this.fb.group({
@@ -44,6 +42,9 @@ export class TargetSystemForm implements OnInit {
   ngOnInit(): void {
     if (this.targetSystem) {
       this.populateForm(this.targetSystem);
+    } else {
+      // If creating a new target system (no @Input() scenario), set default timeout to 10000 ms
+      this.targetSystemForm.patchValue({timeoutMs: '10000'}, {emitEvent: false});
     }
   }
 

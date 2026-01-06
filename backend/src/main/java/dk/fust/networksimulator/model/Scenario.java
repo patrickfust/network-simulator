@@ -1,7 +1,6 @@
 package dk.fust.networksimulator.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import java.util.List;
 @Table(name = "scenarios")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Scenario {
 
     @Id
@@ -48,6 +46,10 @@ public class Scenario {
 
     @OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScenarioHeader> headers = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "target_system_id")
+    private TargetSystem targetSystem;
 
     public Scenario(Long id, Boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String responseBody, Long timeoutMs, Boolean followRedirect) {
         this.id = id;

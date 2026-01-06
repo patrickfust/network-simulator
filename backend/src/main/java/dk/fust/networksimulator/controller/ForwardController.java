@@ -2,7 +2,6 @@ package dk.fust.networksimulator.controller;
 
 import dk.fust.networksimulator.model.Scenario;
 import dk.fust.networksimulator.model.TargetSystem;
-import dk.fust.networksimulator.service.ProxyService;
 import dk.fust.networksimulator.service.ScenarioService;
 import dk.fust.networksimulator.service.SimulatorService;
 import dk.fust.networksimulator.service.TargetSystemService;
@@ -23,15 +22,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 @RequestMapping("/forward")
 @AllArgsConstructor
 @Hidden
-public class SimulatorController {
+public class ForwardController {
 
-    private final ProxyService proxyService;
     private final ScenarioService scenarioService;
     private final SimulatorService simulatorService;
     private final TargetSystemService targetSystemService;
@@ -43,7 +42,7 @@ public class SimulatorController {
      * @param headers the headers send by the client to this proxy.
      * @param request telling spring that we want access to the servlet request object.
      * @param body   the body send by the client to this proxy.
-     * @return what ever the target application, returned to this proxy.
+     * @return whatever the target application, returned to this proxy.
      */
     @RequestMapping(path = {"/{systemName}/**"}, produces = MediaType.ALL_VALUE, consumes = MediaType.ALL_VALUE)
     public ResponseEntity<?> getRoot(@PathVariable String systemName,
@@ -54,10 +53,11 @@ public class SimulatorController {
         log.info("received request to proxy. Method: {}, Path: {}", request.getMethod(), path);
 
         TargetSystem targetSystem = targetSystemService.getTargetSystemByName(systemName).orElseThrow(() -> new RuntimeException("There are no target system with name: " + systemName));
-        List<Scenario> scenarios = scenarioService.findScenariosByPath(path).orElseThrow();
+        List<Scenario> scenarios = scenarioService.findScenariosByPath(path, targetSystem.getId()).orElseThrow();
         ProxyRequest proxyRequest = makeProxyRequest(targetSystem, request, path, scenarios, headers, body);
 
-        log.debug("forwarding request to target application. Scenarios: {}, ProxyRequest: {}", scenarios.size(), proxyRequest);
+        List<Long> scenarioIds = scenarios.stream().map(Scenario::getId).toList();
+        log.debug("forwarding request to target application. Scenarios: {}, ProxyRequest: {}", scenarioIds, proxyRequest);
 
         ProxyResponse proxyResponse = new ProxyResponse();
         SimulationChain simulationChain = simulatorService.makeSimulationChain(scenarios);

@@ -1,3 +1,5 @@
+import {TargetSystem} from './target-system';
+
 export interface ScenarioHeader {
   id?: number;
   headerName: string;
@@ -17,4 +19,5 @@ export interface Scenario {
   timeoutMs: number;
   followRedirect: boolean;
   headers: ScenarioHeader[];
+  targetSystemId?: number;
 }

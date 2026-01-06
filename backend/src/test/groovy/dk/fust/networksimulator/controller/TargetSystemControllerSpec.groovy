@@ -28,7 +28,7 @@ class TargetSystemControllerSpec extends Specification {
 
     def "create target system"() {
         given:
-        TargetSystem targetSystem = new TargetSystem(null, 'Test System', 'http://example.com', 3000, true)
+        TargetSystem targetSystem = new TargetSystem(systemName: 'Test System', targetBaseUrl: 'http://example.com', timeoutMs: 3000)
 
         when:
         def response = mockMvc.perform(MockMvcRequestBuilders.
@@ -47,7 +47,7 @@ class TargetSystemControllerSpec extends Specification {
 
     def "update target system"() {
         given:
-        TargetSystem targetSystem = new TargetSystem(null, 'Test System 2', 'http://example2.com', 30000, false)
+        TargetSystem targetSystem = new TargetSystem(systemName: 'Test System 2', targetBaseUrl: 'http://example2.com', timeoutMs: 30000, followRedirect: false)
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.
