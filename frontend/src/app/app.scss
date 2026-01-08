@@ -22,3 +22,30 @@ header {
 mat-toolbar {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
+
+//Animations for view transitions
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
+::view-transition-old(root) {
+  animation-name: fade-out;
+}
+
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
