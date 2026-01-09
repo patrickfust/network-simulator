@@ -61,10 +61,33 @@ There are two main ways to run the application:
 1. Running from the command line
 2. Running with Docker Compose
 
+The application supports using a PostgreSQL database or an in-memory H2 database.
+
 The application is internally exposed on port `9898`.
 
 ### Running command line
 
+```
+docker run \
+  --name network-simulator-app \
+  -p 9898:9898 \
+  patrickfust/network-simulator:latest
+```
+
+Environment variables:
+
+| Variable Name          | Description                                                    | Default Value                                 |
+|------------------------|----------------------------------------------------------------|-----------------------------------------------|
+| SPRING_PROFILES_ACTIVE | Spring profile to use (e.g., `docker`, `local-postgres`, `h2`) | `h2`                                          |  
+| JDBC_URL               | JDBC URL for PostgreSQL database connection                    | `jdbc:postgresql://db:5432/network_simulator` |
+| JDBC_USERNAME          | Username for PostgreSQL database connection                    | `network_simulator_user`                      |
+| JDBC_PASSWORD          | Password for PostgreSQL database connection                    | `network_simulator_password`                  |
+| DDL_AUTO               | Hibernate DDL auto configuration (`update`, `create`, etc.)    | `update`                                      |
+| SHOW_SQL               | Show SQL statements in logs (`true` or `false`)                | `false`                                       |   
+
+#### Example for local PostgreSQL
+
+This is how you would run the application with a local PostgreSQL database:
 ```
 docker run \
   --name network-simulator-app \
@@ -75,16 +98,6 @@ docker run \
   patrickfust/network-simulator:latest
 ```
 
-Environment variables:
-
-| Variable Name          | Description                                                 | Default Value                                 |
-|------------------------|-------------------------------------------------------------|-----------------------------------------------|
-| SPRING_PROFILES_ACTIVE | Spring profile to use (e.g., `docker`, `local`)             | `docker`                                      |  
-| JDBC_URL               | JDBC URL for PostgreSQL database connection                 | `jdbc:postgresql://db:5432/network_simulator` |
-| JDBC_USERNAME          | Username for PostgreSQL database connection                 | `network_simulator_user`                      |
-| JDBC_PASSWORD          | Password for PostgreSQL database connection                 | `network_simulator_password`                  |
-| DDL_AUTO               | Hibernate DDL auto configuration (`update`, `create`, etc.) | `update`                                      |
-| SHOW_SQL               | Show SQL statements in logs (`true` or `false`)             | `false`                                       |   
 
 ### Running with Docker Compose
 

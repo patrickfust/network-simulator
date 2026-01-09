@@ -3,7 +3,7 @@ spring:
     name: Network Simulator
   profiles:
     active:
-      - local
+      - h2
 
 springdoc:
   writer-with-order-by-keys: true
