@@ -1,0 +1,16 @@
+<form [formGroup]="formGroup">
+  <ng-template matStepLabel>Throttling</ng-template>
+  <p>Response bytes per seconde is supplied, it will limit the response sent to the requester.
+    If multiple scenarios has it defined, the lowest one, wins.</p>
+  <mat-form-field>
+    <mat-label>Response Bytes Per Second</mat-label>
+    <input matInput type="text" formControlName="responseBytesPerSecond" placeholder="Response Bytes Per Second to use">
+    @if (formGroup.get('responseBytesPerSecond')?.invalid && formGroup.get('responseBytesPerSecond')?.touched) {
+      <mat-error>{{ getErrorMessage('responseBytesPerSecond') }}</mat-error>
+    }
+  </mat-form-field>
+  <div>
+    <button matButton matStepperPrevious>Back</button>
+    <button matButton matStepperNext>Next</button>
+  </div>
+</form>

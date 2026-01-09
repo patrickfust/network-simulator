@@ -47,6 +47,7 @@ public class ScenarioService {
         scenario.setTimeoutMs(scenarioDetails.getTimeoutMs());
         scenario.setFollowRedirect(scenarioDetails.getFollowRedirect());
         scenario.setTargetSystem(scenarioDetails.getTargetSystem());
+        scenario.setResponseBytesPerSecond(scenarioDetails.getResponseBytesPerSecond());
         updateHeaders(scenarioDetails, scenario);
         return scenarioRepository.save(scenario);
     }
@@ -89,4 +90,5 @@ public class ScenarioService {
     public void deleteScenario(Long id) {
         scenarioRepository.deleteById(id);
     }
+
 }

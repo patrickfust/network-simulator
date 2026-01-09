@@ -162,7 +162,7 @@ sequenceDiagram
 ## Core Functionality
 - **Network Simulation Proxy**: The application acts as a proxy that can simulate various network conditions:
   - Latency simulation (delay in network responses)
-  - Bandwidth limitations (throttling network speed) [^1]
+  - Bandwidth limitations (throttling network speed)
   - Different HTTP status codes (200, 404, 500, etc.)
   - Packet loss simulation (random packet dropping) [^1]
 - **User-Friendly Interface**: Provides an intuitive dashboard to configure and manage simulation scenarios
@@ -172,7 +172,7 @@ sequenceDiagram
 # Technical Specifications
 
 ## Backend
-- **Technology Stack**: Java 25 with Spring Boot framework
+- **Technology Stack**: Java 25 with Spring Boot 4 framework
 - **Database**: PostgreSQL for storing scenario configurations and logs
 - **APIs**: RESTful services exposed for frontend interaction
 - **Configuration Path**: All configurations handled under path `/api/`

@@ -17,5 +17,6 @@ public class ProxyResponse {
     private byte[] body;
     private String contentType;
     private HttpHeaders headers = new HttpHeaders();
+    private Long bytesPerSecond;
 
 }

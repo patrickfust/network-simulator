@@ -20,4 +20,5 @@ export interface Scenario {
   followRedirect: boolean;
   headers: ScenarioHeader[];
   targetSystemId?: number;
+  responseBytesPerSecond?: number;
 }

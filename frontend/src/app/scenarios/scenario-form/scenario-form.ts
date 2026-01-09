@@ -14,6 +14,7 @@ import {BasicInfoStepComponent} from './basic-info-step.component';
 import {NetworkStepComponent} from './network-step.component';
 import {MatList, MatListItem} from '@angular/material/list';
 import {StatusCodeStepComponent} from './status-code-step.component';
+import {ThrottlingStepComponent} from './throttling-step.component';
 import {MatCard} from '@angular/material/card';
 import {MatDialog} from '@angular/material/dialog';
 import {DeleteScenarioDialog} from './dialog-delete-scenario';
@@ -23,6 +24,7 @@ import {TargetSystem} from '../../models/target-system';
 
 @Component({
   selector: 'app-scenario-form',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -34,9 +36,10 @@ import {TargetSystem} from '../../models/target-system';
     StatusCodeStepComponent,
     MatCard,
     HeadersStepComponent,
+    ThrottlingStepComponent,
   ],
   templateUrl: './scenario-form.html',
-  styleUrl: './scenario-form.scss',
+  styleUrls: ['./scenario-form.scss'],
 })
 export class ScenarioForm implements OnInit, OnChanges {
   readonly dialog = inject(MatDialog);
@@ -51,6 +54,7 @@ export class ScenarioForm implements OnInit, OnChanges {
   networkFormGroup: FormGroup;
   statusCodeFormGroup: FormGroup;
   headerFormGroup: FormGroup;
+  throttlingFormGroup: FormGroup;
   isLinear = false;
   targetSystems: TargetSystem[] = [];
 
@@ -73,6 +77,9 @@ export class ScenarioForm implements OnInit, OnChanges {
     this.headerFormGroup = fb.group({
       headers: this.fb.array([])
     });
+    this.throttlingFormGroup = fb.group({
+      responseBytesPerSecond: ['', [Validators.min(1), Validators.pattern(/^\d+$/)]],
+    })
   }
 
   ngOnInit(): void {
@@ -89,15 +96,13 @@ export class ScenarioForm implements OnInit, OnChanges {
     });  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Only patch if forms are initialized and we have a valid scenario
-    if (changes['scenario'] && changes['scenario'].currentValue && this.basicInfoFormGroup && this.networkFormGroup) {
+    if (changes['scenario'] && changes['scenario'].currentValue && this.basicInfoFormGroup && this.networkFormGroup && this.throttlingFormGroup) {
       this.populateForm(changes['scenario'].currentValue);
     }
   }
 
   private populateForm(scenario: Scenario): void {
-    // Add null checks before patching
-    if (!this.basicInfoFormGroup || !this.networkFormGroup) {
+    if (!this.basicInfoFormGroup || !this.networkFormGroup || !this.throttlingFormGroup) {
       return;
     }
 
@@ -119,7 +124,10 @@ export class ScenarioForm implements OnInit, OnChanges {
       responseBody: scenario.responseBody ?? '',
     }, {emitEvent: false});
 
-    // Clear and populate headers
+    this.throttlingFormGroup.patchValue({
+      responseBytesPerSecond: scenario.responseBytesPerSecond ?? '',
+    }, {emitEvent: false});
+
     const headersArray = this.headerFormGroup.get('headers') as FormArray;
     headersArray.clear();
     if (scenario.headers && scenario.headers.length > 0) {
@@ -138,6 +146,7 @@ export class ScenarioForm implements OnInit, OnChanges {
     return this.basicInfoFormGroup.valid &&
       this.networkFormGroup.valid &&
       this.headerFormGroup.valid &&
+      this.throttlingFormGroup.valid &&
       this.statusCodeFormGroup.valid;
   }
 
@@ -147,6 +156,7 @@ export class ScenarioForm implements OnInit, OnChanges {
       const network = this.networkFormGroup.value;
       const statusCode = this.statusCodeFormGroup.value;
       const headers = this.headerFormGroup.value.headers || [];
+      const throttling = this.throttlingFormGroup.value;
 
       const scenario: Scenario = {
         id: this.scenario?.id,
@@ -156,12 +166,14 @@ export class ScenarioForm implements OnInit, OnChanges {
         headers,
         latencyMs: network.latencyMs !== '' && network.latencyMs != null ? Number(network.latencyMs) : undefined,
         timeoutMs: network.timeoutMs !== '' && network.timeoutMs != null ? Number(network.timeoutMs) : undefined,
+        responseBytesPerSecond: throttling.responseBytesPerSecond !== '' && throttling.responseBytesPerSecond != null ? Number(throttling.responseBytesPerSecond) : undefined,
       };
 
       this.formSubmit.emit(scenario);
     } else {
       this.basicInfoFormGroup.markAllAsTouched();
       this.networkFormGroup.markAllAsTouched();
+      this.throttlingFormGroup.markAllAsTouched();
     }
   }
 
@@ -171,11 +183,11 @@ export class ScenarioForm implements OnInit, OnChanges {
     this.checkForErrors('Network simulation', this.networkFormGroup, errors);
     this.checkForErrors('Status Code', this.statusCodeFormGroup, errors);
     this.checkForErrors('Headers', this.headerFormGroup, errors);
+    this.checkForErrors('Throttling', this.throttlingFormGroup, errors);
     return errors;
   }
 
   private checkForErrors(groupName: string, formGroup: FormGroup, errors: string[]) {
-    // Check form group level errors
     if (formGroup.errors) {
       Object.keys(formGroup.errors).forEach(errorKey => {
         const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
@@ -183,11 +195,9 @@ export class ScenarioForm implements OnInit, OnChanges {
       });
     }
 
-    // Check control level errors
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
 
-      // Handle FormArray
       if (control instanceof FormArray) {
         control.controls.forEach((formGroup, index) => {
           if (formGroup.errors) {
@@ -197,7 +207,6 @@ export class ScenarioForm implements OnInit, OnChanges {
             });
           }
 
-          // Check individual controls within the FormGroup
           if (formGroup instanceof FormGroup) {
             Object.keys(formGroup.controls).forEach(fieldKey => {
               const fieldControl = formGroup.get(fieldKey);
@@ -211,7 +220,6 @@ export class ScenarioForm implements OnInit, OnChanges {
           }
         });
       } else if (control?.errors) {
-        // Regular control
         Object.keys(control.errors).forEach(errorKey => {
           const message = this.getErrorMessage(key, errorKey, control.errors![errorKey]);
           errors.push(`${groupName}: ${message}`);
@@ -253,6 +261,7 @@ export class ScenarioForm implements OnInit, OnChanges {
       'headerName': 'Header Name',
       'headerValue': 'Header Value',
       'headerReplaceValue': 'Replace existing header',
+      'responseBytesPerSecond': 'Response Bytes Per Second',
     };
 
     return labels[fieldName] || fieldName;

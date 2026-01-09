@@ -16,6 +16,10 @@
     <ng-template matStepLabel>Headers</ng-template>
     <app-headers-step [formGroup]="headerFormGroup" [parent]="this"></app-headers-step>
   </mat-step>
+  <mat-step [stepControl]="throttlingFormGroup">
+    <ng-template matStepLabel>Throttling</ng-template>
+    <app-throttling-step [formGroup]="throttlingFormGroup" [parent]="this"></app-throttling-step>
+  </mat-step>
   <mat-step [stepControl]="statusCodeFormGroup">
     <ng-template matStepLabel>Status Code</ng-template>
     <app-status-code-step [formGroup]="statusCodeFormGroup" [parent]="this"></app-status-code-step>
@@ -45,7 +49,7 @@
     mat-raised-button
     color="primary"
     type="button"
-    [disabled]="basicInfoFormGroup.invalid || networkFormGroup.invalid || statusCodeFormGroup.invalid"
+    [disabled]="basicInfoFormGroup.invalid || networkFormGroup.invalid || statusCodeFormGroup.invalid || throttlingFormGroup.invalid"
     (click)="onSubmit()">
     <mat-icon class="icon-left" aria-hidden="false" aria-label="Submit scenario">post_add</mat-icon>
     {{ submitButtonText }}
