@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
 import { ScenarioForm } from './scenario-form';
 import { ScenarioHeader } from '../../models/scenario';
 import { materialImports } from '../../shared/material-imports';
+import {ScenarioStepBase} from './scenario-step.base';
 
 @Component({
   selector: 'app-headers-step',
@@ -29,9 +30,7 @@ import { materialImports } from '../../shared/material-imports';
     materialImports,
   ]
 })
-export class HeadersStepComponent {
-  @Input() formGroup!: FormGroup;
-  @Input() parent!: ScenarioForm;
+export class HeadersStepComponent extends ScenarioStepBase {
 
   private fb = inject(FormBuilder);
 
@@ -58,10 +57,4 @@ export class HeadersStepComponent {
     });
   }
 
-  getErrorMessage(fieldName: string): string {
-    const control = this.formGroup.get(fieldName);
-    if (!control?.errors) return '';
-    const errorKey = Object.keys(control.errors)[0];
-    return this.parent['getErrorMessage'](fieldName, errorKey, control.errors[errorKey]);
-  }
 }

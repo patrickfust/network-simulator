@@ -7,6 +7,7 @@ import {materialImports} from '../../shared/material-imports';
 import {MatList, MatListItem} from '@angular/material/list';
 import {DeleteTargetSystemDialog} from './dialog-delete-target-system';
 import {MatDialog} from '@angular/material/dialog';
+import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
 
 @Component({
   selector: 'app-target-system-form',
@@ -21,7 +22,7 @@ import {MatDialog} from '@angular/material/dialog';
   templateUrl: './target-system-form.html',
   styleUrl: './target-system-form.scss',
 })
-export class TargetSystemForm implements OnInit {
+export class TargetSystemForm extends NetworkSimulatorForm implements OnInit {
   readonly dialog = inject(MatDialog);
   @Input() targetSystem?: TargetSystem;
   @Input() submitButtonText: string = 'Submit';
@@ -31,6 +32,7 @@ export class TargetSystemForm implements OnInit {
   targetSystemForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
+    super();
     this.targetSystemForm = this.fb.group({
       systemName: ['', [Validators.required]],
       targetBaseUrl: ['', [Validators.required, Validators.pattern('https?://.+')]],
@@ -95,53 +97,7 @@ export class TargetSystemForm implements OnInit {
     return errors;
   }
 
-  private checkForErrors(groupName: string, formGroup: FormGroup, errors: string[]) {
-    // Check form group level errors
-    if (formGroup.errors) {
-      Object.keys(formGroup.errors).forEach(errorKey => {
-        const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
-        errors.push(`${groupName}: ${message}`);
-      });
-    }
-
-    // Check control level errors
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-
-      // Handle FormArray
-      if (control instanceof FormArray) {
-        control.controls.forEach((formGroup, index) => {
-          if (formGroup.errors) {
-            Object.keys(formGroup.errors).forEach(errorKey => {
-              const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
-              errors.push(`${groupName} [${index + 1}]: ${message}`);
-            });
-          }
-
-          // Check individual controls within the FormGroup
-          if (formGroup instanceof FormGroup) {
-            Object.keys(formGroup.controls).forEach(fieldKey => {
-              const fieldControl = formGroup.get(fieldKey);
-              if (fieldControl?.errors) {
-                Object.keys(fieldControl.errors).forEach(errorKey => {
-                  const message = this.getErrorMessage(fieldKey, errorKey, fieldControl.errors![errorKey]);
-                  errors.push(`${groupName} [${index + 1}]: ${message}`);
-                });
-              }
-            });
-          }
-        });
-      } else if (control?.errors) {
-        // Regular control
-        Object.keys(control.errors).forEach(errorKey => {
-          const message = this.getErrorMessage(key, errorKey, control.errors![errorKey]);
-          errors.push(`${groupName}: ${message}`);
-        });
-      }
-    });
-  }
-
-  private getErrorMessage(fieldName: string, errorKey: string, errorValue: any): string {
+  public getErrorMessage(fieldName: string, errorKey: string, errorValue: any): string {
     const fieldLabel = this.getFieldLabel(fieldName);
 
     switch (errorKey) {

@@ -21,6 +21,7 @@ import {DeleteScenarioDialog} from './dialog-delete-scenario';
 import {HeadersStepComponent} from './headers-step.component';
 import {TargetSystemService} from '../../services/target-system.service';
 import {TargetSystem} from '../../models/target-system';
+import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
 
 @Component({
   selector: 'app-scenario-form',
@@ -41,7 +42,7 @@ import {TargetSystem} from '../../models/target-system';
   templateUrl: './scenario-form.html',
   styleUrls: ['./scenario-form.scss'],
 })
-export class ScenarioForm implements OnInit, OnChanges {
+export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChanges {
   readonly dialog = inject(MatDialog);
   targetSystemService = inject(TargetSystemService);
 
@@ -59,6 +60,7 @@ export class ScenarioForm implements OnInit, OnChanges {
   targetSystems: TargetSystem[] = [];
 
   constructor(private fb: FormBuilder) {
+    super();
     this.basicInfoFormGroup = fb.group({
       name: ['', Validators.required],
       targetSystemId: [null],
@@ -187,48 +189,7 @@ export class ScenarioForm implements OnInit, OnChanges {
     return errors;
   }
 
-  private checkForErrors(groupName: string, formGroup: FormGroup, errors: string[]) {
-    if (formGroup.errors) {
-      Object.keys(formGroup.errors).forEach(errorKey => {
-        const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
-        errors.push(`${groupName}: ${message}`);
-      });
-    }
-
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-
-      if (control instanceof FormArray) {
-        control.controls.forEach((formGroup, index) => {
-          if (formGroup.errors) {
-            Object.keys(formGroup.errors).forEach(errorKey => {
-              const message = this.getErrorMessage('', errorKey, formGroup.errors![errorKey]);
-              errors.push(`${groupName} [${index + 1}]: ${message}`);
-            });
-          }
-
-          if (formGroup instanceof FormGroup) {
-            Object.keys(formGroup.controls).forEach(fieldKey => {
-              const fieldControl = formGroup.get(fieldKey);
-              if (fieldControl?.errors) {
-                Object.keys(fieldControl.errors).forEach(errorKey => {
-                  const message = this.getErrorMessage(fieldKey, errorKey, fieldControl.errors![errorKey]);
-                  errors.push(`${groupName} [${index + 1}]: ${message}`);
-                });
-              }
-            });
-          }
-        });
-      } else if (control?.errors) {
-        Object.keys(control.errors).forEach(errorKey => {
-          const message = this.getErrorMessage(key, errorKey, control.errors![errorKey]);
-          errors.push(`${groupName}: ${message}`);
-        });
-      }
-    });
-  }
-
-  private getErrorMessage(fieldName: string, errorKey: string, errorValue: any): string {
+  public getErrorMessage(fieldName: string, errorKey: string, errorValue: any): string {
     const fieldLabel = this.getFieldLabel(fieldName);
 
     switch (errorKey) {
