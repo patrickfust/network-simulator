@@ -83,18 +83,21 @@ Environment variables:
 | JDBC_USERNAME          | Username for PostgreSQL database connection                    | `network_simulator_user`                      |
 | JDBC_PASSWORD          | Password for PostgreSQL database connection                    | `network_simulator_password`                  |
 | DDL_AUTO               | Hibernate DDL auto configuration (`update`, `create`, etc.)    | `update`                                      |
-| SHOW_SQL               | Show SQL statements in logs (`true` or `false`)                | `false`                                       |   
+| SHOW_SQL               | Show SQL statements in logs (`true` or `false`)                | `false`                                       |
+| CHUNK_SIZE             | Chunk size for throttling simulation in bytes                  | `100`                                         |
 
 #### Example for local PostgreSQL
 
-This is how you would run the application with a local PostgreSQL database:
+This is how you would run the application with a local PostgreSQL database and a chunk size of 1024 bytes:
 ```
 docker run \
   --name network-simulator-app \
   -p 9898:9898 \
-  --env JDBC_URL=jdbc:postgresql://host.docker.internal:5432/network_simulator \
+  --env SPRING_PROFILES_ACTIVE=docker \
+  --env JDBC_URL=jdbc:postgresql://host.docker.internal:5532/network_simulator \
   --env JDBC_USERNAME=network_simulator_user \
   --env JDBC_PASSWORD=network_simulator_password \
+  --env CHUNK_SIZE=1024 \
   patrickfust/network-simulator:latest
 ```
 

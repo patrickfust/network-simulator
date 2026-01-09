@@ -1,3 +1,7 @@
+network-simulator:
+  throttling:
+    chunk-size: ${CHUNK_SIZE:100} # bytes
+
 spring:
   application:
     name: Network Simulator

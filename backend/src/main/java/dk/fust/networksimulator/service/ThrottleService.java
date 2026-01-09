@@ -4,6 +4,7 @@ import dk.fust.networksimulator.service.proxy.ProxyResponse;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -14,7 +15,8 @@ import java.util.Locale;
 @Service
 public class ThrottleService {
 
-    private static final int CHUNK_SIZE = 100;
+    @Value("${network-simulator.throttling.chunk-size}") // Configurable bytes per second, default 1 MB
+    private int chunkSize;
 
     public StreamingResponseBody makeThrottledResponseStream(ProxyResponse proxyResponse, long bytesPerSecond) {
         Bandwidth bandwidth = Bandwidth.builder()
@@ -30,8 +32,8 @@ public class ThrottleService {
                 log.debug("Starting to send response ({} bytes) with throttling at {} bytes/second", body.length, bytesPerSecond);
                 long startTime = System.currentTimeMillis();
                 long bytesSent = 0;
-                for (int i = 0; i < body.length; i += CHUNK_SIZE) {
-                    int end = Math.min(i + CHUNK_SIZE, body.length);
+                for (int i = 0; i < body.length; i += chunkSize) {
+                    int end = Math.min(i + chunkSize, body.length);
                     byte[] chunk = new byte[end - i];
                     System.arraycopy(body, i, chunk, 0, chunk.length);
                     try {
