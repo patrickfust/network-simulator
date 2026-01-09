@@ -31,4 +31,4 @@ RUN chown appuser:appgroup app.jar
 USER appuser
 
 EXPOSE 9898
-ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:docker}", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE:h2}", "-jar", "app.jar"]
