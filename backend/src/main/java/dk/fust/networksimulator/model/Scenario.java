@@ -41,6 +41,9 @@ public class Scenario {
     @Column(name = "timeout_ms")
     private Long timeoutMs;
 
+    @Column(name = "response_bytes_per_second")
+    private Long responseBytesPerSecond;
+
     @Column(name = "follow_redirects")
     private Boolean followRedirect;
 

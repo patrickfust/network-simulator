@@ -4,6 +4,7 @@ import {MatStepLabel, MatStepperPrevious} from '@angular/material/stepper';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {ScenarioForm} from './scenario-form';
+import {ScenarioStepBase} from './scenario-step.base';
 
 @Component({
   selector: 'app-status-code-step',
@@ -20,15 +21,5 @@ import {ScenarioForm} from './scenario-form';
     MatStepLabel
   ]
 })
-export class StatusCodeStepComponent {
-  @Input() formGroup!: FormGroup;
-  @Input() parent!: ScenarioForm;
-
-  getErrorMessage(fieldName: string): string {
-    const control = this.formGroup.get(fieldName);
-    if (!control?.errors) return '';
-    const errorKey = Object.keys(control.errors)[0];
-    return this.parent['getErrorMessage'](fieldName, errorKey, control.errors[errorKey]);
-  }
-
+export class StatusCodeStepComponent extends ScenarioStepBase {
 }

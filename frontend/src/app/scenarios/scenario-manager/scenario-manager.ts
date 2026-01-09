@@ -22,7 +22,7 @@ export class ScenarioManager implements AfterViewInit {
   readonly snackBar = inject(MatSnackBar);
   readonly router = inject(Router);
 
-  displayedColumns: string[] = ['enableScenario', 'id', 'name', 'description', 'targetSystem', 'path', 'statusCode', 'hasBody', 'hasHeaders', 'timeoutMs', 'latencyMs'];
+  displayedColumns: string[] = ['enableScenario', 'id', 'name', 'description', 'targetSystem', 'path', 'statusCode', 'hasBody', 'hasHeaders', 'timeoutMs', 'latencyMs', 'responseBytesPerSecond'];
   scenarioService: ScenarioService = inject(ScenarioService);
   targetSystemService: TargetSystemService = inject(TargetSystemService);
   dataSource = new MatTableDataSource<Scenario>([]);

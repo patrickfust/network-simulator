@@ -21,7 +21,6 @@ public class ProxyService {
 
     public void sendRequest(ProxyRequest proxyRequest, ProxyResponse proxyResponse) {
         HttpHeaders httpHeaders = asSpringHeaders(proxyRequest.getHeaders());
-        // This way we tell the target application, who the call originated from
         String host = proxyRequest.getHeaders().get("host");
         if (host != null) {
             httpHeaders.add("X-Forwarded-Host", host);

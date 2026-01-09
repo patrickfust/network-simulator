@@ -5,6 +5,7 @@ import dk.fust.networksimulator.model.TargetSystem;
 import dk.fust.networksimulator.service.ScenarioService;
 import dk.fust.networksimulator.service.SimulatorService;
 import dk.fust.networksimulator.service.TargetSystemService;
+import dk.fust.networksimulator.service.ThrottleService;
 import dk.fust.networksimulator.service.proxy.ProxyRequest;
 import dk.fust.networksimulator.service.proxy.ProxyResponse;
 import dk.fust.networksimulator.simulations.SimulationChain;
@@ -17,12 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.OptionalLong;
 
 @Slf4j
 @RestController
@@ -34,19 +36,21 @@ public class ForwardController {
     private final ScenarioService scenarioService;
     private final SimulatorService simulatorService;
     private final TargetSystemService targetSystemService;
+    private final ThrottleService throttleService;
 
     /**
      * Method for handling requests, we want to proxy to the target application.
-     * Handles all paths except those starting with "_", which are reserved for internal use, like api and swagger.
      *
-     * @param headers the headers send by the client to this proxy.
-     * @param request telling spring that we want access to the servlet request object.
-     * @param body   the body send by the client to this proxy.
+     * @param systemName the name of the target system we want to proxy to.
+     * @param headers    the headers send by the client to this proxy.
+     * @param request    telling spring that we want access to the servlet request object.
+     * @param body       optional - the body send by the client to this proxy.
      * @return whatever the target application, returned to this proxy.
      */
     @RequestMapping(path = {"/{systemName}/**"}, produces = MediaType.ALL_VALUE, consumes = MediaType.ALL_VALUE)
-    public ResponseEntity<?> getRoot(@PathVariable String systemName,
-                                     @RequestHeader Map<String, String> headers, HttpServletRequest request,
+    public ResponseEntity<StreamingResponseBody> getRoot(@PathVariable String systemName,
+                                     @RequestHeader Map<String, String> headers,
+                                     HttpServletRequest request,
                                      @RequestBody(required = false) byte[] body) throws IOException {
         String fullPath = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
         String path = fullPath.substring(9 + systemName.length());
@@ -55,29 +59,66 @@ public class ForwardController {
         TargetSystem targetSystem = targetSystemService.getTargetSystemByName(systemName).orElseThrow(() -> new RuntimeException("There are no target system with name: " + systemName));
         List<Scenario> scenarios = scenarioService.findScenariosByPath(path, targetSystem.getId()).orElseThrow();
         ProxyRequest proxyRequest = makeProxyRequest(targetSystem, request, path, scenarios, headers, body);
+        ProxyResponse proxyResponse = makeProxyResponse(scenarios);
 
         List<Long> scenarioIds = scenarios.stream().map(Scenario::getId).toList();
         log.debug("forwarding request to target application. Scenarios: {}, ProxyRequest: {}", scenarioIds, proxyRequest);
 
-        ProxyResponse proxyResponse = new ProxyResponse();
         SimulationChain simulationChain = simulatorService.makeSimulationChain(scenarios);
         simulationChain.doSimulation(proxyRequest, proxyResponse);
         String hasBody = proxyResponse.getBody() != null && proxyResponse.getBody().length > 0 ? "with body" : "without body";
-        log.debug("ProxyResponse: {}", proxyResponse);
-        log.info("received status code: {} ({}) from target/simulations, for path: {}", proxyResponse.getStatusCode(), hasBody, path);
-        return ResponseEntity
-                .status(proxyResponse.getStatusCode())
-                .headers(returnHttpHeadersForProxyResponse(proxyResponse.getHeaders()))
-                .body(proxyResponse.getBody());
+        log.trace("ProxyResponse: {}", proxyResponse);
+        log.info("Received status code: {} ({}) from target/simulations, for path: {}", proxyResponse.getStatusCode(), hasBody, path);
+
+        return makeResponseEntity(proxyResponse);
+    }
+
+    private ResponseEntity<StreamingResponseBody> makeResponseEntity(ProxyResponse proxyResponse) {
+        HttpHeaders filteredHeaders = returnHttpHeadersForProxyResponse(
+                proxyResponse.getHeaders(),
+                proxyResponse.getBytesPerSecond() != null
+        );
+
+        if (proxyResponse.getBytesPerSecond() != null) {
+            StreamingResponseBody stream = throttleService.makeThrottledResponseStream(proxyResponse, proxyResponse.getBytesPerSecond());
+            return ResponseEntity
+                    .status(proxyResponse.getStatusCode())
+                    .headers(filteredHeaders)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(stream);
+        } else {
+            ResponseEntity.BodyBuilder builder = ResponseEntity
+                    .status(proxyResponse.getStatusCode())
+                    .headers(filteredHeaders);
+
+            if (proxyResponse.getContentType() != null) {
+                MediaType mediaType = MediaType.parseMediaType(proxyResponse.getContentType());
+                builder.contentType(mediaType);
+            }
+            // Return as StreamingResponseBody to maintain consistent return type
+            return builder.body(outputStream -> {
+                if (proxyResponse.getBody() != null) {
+                    outputStream.write(proxyResponse.getBody());
+                }
+            });
+        }
     }
 
     /**
-     * Removes the Transfer-Encoding header from the response to avoid duplicate headers
+     * Removes the Transfer-Encoding header from the response to avoid duplicate headers.
+     * Removes Content-Type header as it is set separately in the ResponseEntity.
+     * Removes Content-Length header if throttling is enabled, as the content length will change due
      */
-    private HttpHeaders returnHttpHeadersForProxyResponse(HttpHeaders responseHeaders) {
+    private HttpHeaders returnHttpHeadersForProxyResponse(HttpHeaders responseHeaders, boolean isThrottling) {
         HttpHeaders newHeaders = new HttpHeaders();
-        newHeaders.addAll(responseHeaders);
-        newHeaders.remove("Transfer-Encoding");
+        for (Map.Entry<String, List<String>> entry : responseHeaders.headerSet()) {
+            if (!"Transfer-Encoding".equalsIgnoreCase(entry.getKey()) &&
+                    !(isThrottling && "Content-Length".equalsIgnoreCase(entry.getKey())) &&
+                    !(isThrottling && "Content-Type".equalsIgnoreCase(entry.getKey()))) {
+                newHeaders.addAll(entry.getKey(), entry.getValue());
+            }
+        }
+        log.debug("Filtered response headers: {}", newHeaders);
         return newHeaders;
     }
 
@@ -90,6 +131,7 @@ public class ForwardController {
                 .mapToLong(Scenario::getTimeoutMs)
                 .min()
                 .orElse(targetSystem.getTimeoutMs());
+
         boolean followRedirect = scenarios.stream()
                 .map(Scenario::getFollowRedirect)
                 .filter(Objects::nonNull)
@@ -105,6 +147,20 @@ public class ForwardController {
                 timeoutMillis,
                 followRedirect
         );
+    }
+
+    private ProxyResponse makeProxyResponse(List<Scenario> scenarios) {
+        ProxyResponse proxyResponse = new ProxyResponse();
+
+        OptionalLong responseBytesPerSecond = scenarios.stream()
+                .filter(s -> s.getResponseBytesPerSecond() != null && s.getResponseBytesPerSecond() > 0)
+                .mapToLong(Scenario::getResponseBytesPerSecond)
+                .min();
+        if (responseBytesPerSecond.isPresent()) {
+            proxyResponse.setBytesPerSecond(responseBytesPerSecond.getAsLong());
+        }
+
+        return proxyResponse;
     }
 
 }

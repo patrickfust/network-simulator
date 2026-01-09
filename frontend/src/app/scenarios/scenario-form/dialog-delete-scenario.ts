@@ -31,6 +31,7 @@ export interface DialogData {
     MatDialogActions,
     MatIcon,
   ],
+  standalone: true
 })
 export class DeleteScenarioDialog {
   readonly dialogRef = inject(MatDialogRef<DeleteScenarioDialog>);

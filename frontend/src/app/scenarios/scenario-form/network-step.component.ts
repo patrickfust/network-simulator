@@ -4,6 +4,7 @@ import {MatStepLabel, MatStepperNext, MatStepperPrevious} from '@angular/materia
 import {MatError, MatFormField, MatHint, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {ScenarioForm} from './scenario-form';
+import {ScenarioStepBase} from './scenario-step.base';
 
 @Component({
   selector: 'app-network-step',
@@ -22,15 +23,5 @@ import {ScenarioForm} from './scenario-form';
     MatHint
   ]
 })
-export class NetworkStepComponent {
-  @Input() formGroup!: FormGroup;
-  @Input() parent!: ScenarioForm;
-
-  getErrorMessage(fieldName: string): string {
-    const control = this.formGroup.get(fieldName);
-    if (!control?.errors) return '';
-    const errorKey = Object.keys(control.errors)[0];
-    return this.parent['getErrorMessage'](fieldName, errorKey, control.errors[errorKey]);
-  }
-
+export class NetworkStepComponent extends ScenarioStepBase {
 }
