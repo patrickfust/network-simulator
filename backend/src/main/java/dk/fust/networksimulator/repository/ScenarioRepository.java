@@ -16,4 +16,6 @@ public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
             nativeQuery = true)
     Optional<List<Scenario>> findScenariosByPath(@Param("path") String path, @Param("targetSystemId") Long targetSystemId);
 
+    Optional<Scenario> findByName(String name);
+
 }

@@ -74,7 +74,7 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
     });
     this.statusCodeFormGroup = fb.group({
       statusCode: ['', [Validators.min(100), Validators.max(599), Validators.pattern(/^\d+$/)]],
-      responseBody: [''],
+      bodyToReturn: [''],
     }, {validators: this.statusCodeBodyValidator.bind(this)});
     this.headerFormGroup = fb.group({
       headers: this.fb.array([])
@@ -123,7 +123,7 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
 
     this.statusCodeFormGroup.patchValue({
       statusCode: scenario.statusCode ?? '',
-      responseBody: scenario.responseBody ?? '',
+      bodyToReturn: scenario.bodyToReturn ?? '',
     }, {emitEvent: false});
 
     this.throttlingFormGroup.patchValue({
@@ -217,7 +217,7 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
       'latencyMs': 'Latency (ms)',
       'timeoutMs': 'Timeout (ms)',
       'statusCode': 'Status Code',
-      'responseBody': 'Response Body',
+      'bodyToReturn': 'Response Body',
       'headers': 'Headers',
       'headerName': 'Header Name',
       'headerValue': 'Header Value',
@@ -230,7 +230,7 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
 
   private statusCodeBodyValidator(control: AbstractControl): ValidationErrors | null {
     const statusCode = control.get('statusCode')?.value;
-    const body = control.get('responseBody')?.value;
+    const body = control.get('bodyToReturn')?.value;
     if (!statusCode && body) {
       return {bodyWithoutStatusCode: true};
     }

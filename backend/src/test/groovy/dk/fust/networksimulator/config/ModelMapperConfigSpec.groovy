@@ -39,7 +39,7 @@ class ModelMapperConfigSpec extends Specification {
         TargetSystem targetSystem = new TargetSystem(systemName: "System A", targetBaseUrl: "https://system-a.com", timeoutMs: 1000)
         targetSystemRepository.save(targetSystem)
         Scenario scenario = new Scenario(id: 1, name: "Test Scenario", path: "/test", description: "A test scenario", latencyMs: 200,
-                statusCode: 200, responseBody: "OK", timeoutMs: 5000, followRedirect: true, targetSystem: targetSystem)
+                statusCode: 200, bodyToReturn: "OK", timeoutMs: 5000, followRedirect: true, targetSystem: targetSystem)
 
         when:
         ScenarioDto scenarioDto = modelMapper.map(scenario, ScenarioDto)
@@ -51,7 +51,7 @@ class ModelMapperConfigSpec extends Specification {
         scenarioDto.description == scenario.description
         scenarioDto.latencyMs == scenario.latencyMs
         scenarioDto.statusCode == scenario.statusCode
-        scenarioDto.responseBody == scenario.responseBody
+        scenarioDto.bodyToReturn == scenario.bodyToReturn
         scenarioDto.timeoutMs == scenario.timeoutMs
         scenarioDto.followRedirect == scenario.followRedirect
         scenarioDto.targetSystemId == scenario.targetSystem.id
@@ -66,7 +66,7 @@ class ModelMapperConfigSpec extends Specification {
         backAgain.description == scenarioDto.description
         backAgain.latencyMs == scenarioDto.latencyMs
         backAgain.statusCode == scenarioDto.statusCode
-        backAgain.responseBody == scenarioDto.responseBody
+        backAgain.bodyToReturn == scenarioDto.bodyToReturn
         backAgain.timeoutMs == scenarioDto.timeoutMs
         backAgain.followRedirect == scenarioDto.followRedirect
         backAgain.targetSystem.id == scenarioDto.targetSystemId

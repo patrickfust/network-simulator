@@ -15,7 +15,7 @@ export interface Scenario {
   description: string;
   latencyMs: number;
   statusCode: number;
-  responseBody : string;
+  bodyToReturn : string;
   timeoutMs: number;
   followRedirect: boolean;
   headers: ScenarioHeader[];

@@ -30,7 +30,7 @@ public class SimulatorService {
     private static void addStatusCodeSimulation(Scenario scenario, SimulationChainDecorator simulationChainDecorator) {
         if (scenario.getStatusCode() != null) {
             Simulation statusCodeSimulation = new StatusCodeSimulation(HttpStatusCode.valueOf(scenario.getStatusCode()),
-                    scenario.getResponseBody() != null ? scenario.getResponseBody().getBytes() : null);
+                    scenario.getBodyToReturn() != null ? scenario.getBodyToReturn().getBytes() : null);
             simulationChainDecorator.addSimulation(statusCodeSimulation);
         }
     }

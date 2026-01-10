@@ -28,7 +28,7 @@ class ScenarioControllerSpec extends Specification {
 
     def "create scenario"() {
         given:
-        Scenario scenario = new Scenario(name: "Test Scenario", path: "/test", description: "desc", latencyMs: 100, statusCode: 200, responseBody: "ok", timeoutMs: 500, followRedirect: true)
+        Scenario scenario = new Scenario(name: "Test Scenario", path: "/test", description: "desc", latencyMs: 100, statusCode: 200, bodyToReturn: "ok", timeoutMs: 500, followRedirect: true)
 
         when:
         def response = mockMvc.perform(MockMvcRequestBuilders.
@@ -48,7 +48,7 @@ class ScenarioControllerSpec extends Specification {
     def "update scenario"() {
         given:
         Scenario scenario = new Scenario([id: scenarioId, name: "Updated", path: "/update", description: "desc",
-                                          latencyMs: 50, statusCode: 201, responseBody: "body", timeoutMs: 200, followRedirect: false])
+                                          latencyMs: 50, statusCode: 201, bodyToReturn: "body", timeoutMs: 200, followRedirect: false])
 
         expect:
         mockMvc.perform(MockMvcRequestBuilders.
@@ -57,7 +57,7 @@ class ScenarioControllerSpec extends Specification {
                 .content(new JsonBuilder(scenario).toString()))
                 .andExpect(jsonPath('$.id').value(scenarioId))
                 .andExpect(jsonPath('$.name').value('Updated'))
-                .andExpect(jsonPath('$.responseBody').value('body'))
+                .andExpect(jsonPath('$.bodyToReturn').value('body'))
                 .andExpect(jsonPath('$.headers.length()').value(0))
     }
 
@@ -74,7 +74,7 @@ class ScenarioControllerSpec extends Specification {
                 .content(new JsonBuilder(scenario).toString()))
                 .andExpect(jsonPath('$.id').value(scenarioId))
                 .andExpect(jsonPath('$.name').value('With Headers'))
-                .andExpect(jsonPath('$.responseBody').doesNotExist())
+                .andExpect(jsonPath('$.bodyToReturn').doesNotExist())
                 .andExpect(jsonPath('$.headers.length()').value(2))
                 .andExpect(jsonPath('$.headers[0].headerName').value('X-Test'))
                 .andExpect(jsonPath('$.headers[0].headerValue').value('123'))
@@ -97,7 +97,7 @@ class ScenarioControllerSpec extends Specification {
                 .content(new JsonBuilder(scenario).toString()))
                 .andExpect(jsonPath('$.id').value(scenarioId))
                 .andExpect(jsonPath('$.name').value('With Headers'))
-                .andExpect(jsonPath('$.responseBody').doesNotExist())
+                .andExpect(jsonPath('$.bodyToReturn').doesNotExist())
                 .andExpect(jsonPath('$.headers.length()').value(2))
                 .andExpect(jsonPath('$.headers[0].headerName').value('X-Test'))
                 .andExpect(jsonPath('$.headers[0].headerValue').value('123'))

@@ -1,0 +1,16 @@
+{
+  "targetSystems" : [ {
+    "followRedirect" : true,
+    "systemName" : "httpbin",
+    "targetBaseUrl" : "https://httpbin.org",
+    "timeoutMs" : 1000
+  } ],
+  "scenarios" : [ {
+    "description" : "Simulates a response for downloads",
+    "enableScenario" : true,
+    "followRedirect" : true,
+    "headers" : [ ],
+    "name" : "Just for the test",
+    "targetSystemName" : "httpbin"
+  } ]
+}

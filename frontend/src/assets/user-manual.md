@@ -153,3 +153,6 @@ sequenceDiagram
   Network Simulator-->>Your Application: Return response with defined HTTP status code (and response body) 
 ```
 
+### Throttling
+
+When throttling is specified, the application will limit the bandwidth of the response to the specified number of bytes per second.

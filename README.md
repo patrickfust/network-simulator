@@ -76,15 +76,16 @@ docker run \
 
 Environment variables:
 
-| Variable Name          | Description                                                    | Default Value                                 |
-|------------------------|----------------------------------------------------------------|-----------------------------------------------|
-| SPRING_PROFILES_ACTIVE | Spring profile to use (e.g., `docker`, `local-postgres`, `h2`) | `h2`                                          |  
-| JDBC_URL               | JDBC URL for PostgreSQL database connection                    | `jdbc:postgresql://db:5432/network_simulator` |
-| JDBC_USERNAME          | Username for PostgreSQL database connection                    | `network_simulator_user`                      |
-| JDBC_PASSWORD          | Password for PostgreSQL database connection                    | `network_simulator_password`                  |
-| DDL_AUTO               | Hibernate DDL auto configuration (`update`, `create`, etc.)    | `update`                                      |
-| SHOW_SQL               | Show SQL statements in logs (`true` or `false`)                | `false`                                       |
-| CHUNK_SIZE             | Chunk size for throttling simulation in bytes                  | `100`                                         |
+| Variable Name                   | Description                                                    | Default Value                                 |
+|---------------------------------|----------------------------------------------------------------|-----------------------------------------------|
+| SPRING_PROFILES_ACTIVE          | Spring profile to use (e.g., `docker`, `local-postgres`, `h2`) | `h2`                                          |  
+| JDBC_URL                        | JDBC URL for PostgreSQL database connection                    | `jdbc:postgresql://db:5432/network_simulator` |
+| JDBC_USERNAME                   | Username for PostgreSQL database connection                    | `network_simulator_user`                      |
+| JDBC_PASSWORD                   | Password for PostgreSQL database connection                    | `network_simulator_password`                  |
+| DDL_AUTO                        | Hibernate DDL auto configuration (`update`, `create`, etc.)    | `update`                                      |
+| SHOW_SQL                        | Show SQL statements in logs (`true` or `false`)                | `false`                                       |
+| CHUNK_SIZE                      | Chunk size for throttling simulation in bytes                  | `100`                                         |
+| NETWORK_SIMULATOR_CONFIGURATION | JSON string for initial configuration of the network simulator | `null`                                        |
 
 #### Example for local PostgreSQL
 
@@ -100,7 +101,6 @@ docker run \
   --env CHUNK_SIZE=1024 \
   patrickfust/network-simulator:latest
 ```
-
 
 ### Running with Docker Compose
 
@@ -219,5 +219,11 @@ If you want to generate the Bruno collections yourself, you can do so from the O
 2. Start by downloading the OpenAPI specification from `http://localhost:9898/v3/api-docs` and save it as `network-simulator.json`
 3. Run the following command to import the OpenAPI specification and generate the Bruno collection:
 `bru import openapi --source network-simulator.json --output=bruno/network-simulator`
+
+# Demo - Test Containers
+
+You can use Test Containers to run integration tests using the network simulator application.
+
+In the folder `demo` you can find a simple demo project that shows how to do use Network Simulator in your tests.
 
 [^1]: Feature is planned but not yet implemented.

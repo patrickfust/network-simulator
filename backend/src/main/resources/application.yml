@@ -8,6 +8,8 @@ spring:
   profiles:
     active:
       - h2
+  jackson:
+    default-property-inclusion: NON_NULL
 
 springdoc:
   writer-with-order-by-keys: true
