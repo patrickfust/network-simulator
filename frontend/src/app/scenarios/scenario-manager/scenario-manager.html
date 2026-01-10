@@ -64,7 +64,7 @@
     <ng-container matColumnDef="hasBody">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Has Body</th>
       <td mat-cell *matCellDef="let element">
-        @if (element.responseBody) {
+        @if (element.bodyToReturn) {
           <mat-icon>check</mat-icon>
         }
       </td>

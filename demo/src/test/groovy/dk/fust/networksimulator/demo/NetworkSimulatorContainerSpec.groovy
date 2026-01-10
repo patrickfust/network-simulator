@@ -10,7 +10,6 @@ import spock.lang.Stepwise
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
-import java.time.Duration
 
 @Stepwise
 class NetworkSimulatorContainerSpec extends Specification {
@@ -50,11 +49,6 @@ class NetworkSimulatorContainerSpec extends Specification {
     def "network simulator container starts"() {
         expect:
         simulator.running
-    }
-
-    def "verify connection to network simulator"() {
-        expect:
-        waitForHttp(base, client)
     }
 
     def "add target system"() {
@@ -129,20 +123,28 @@ class NetworkSimulatorContainerSpec extends Specification {
         println json
     }
 
-    // Waits until HTTP on the mapped port responds (simple retry)
-    private static boolean waitForHttp(String baseUrl, HttpClient client) {
-        int attempts = 0
-        while (attempts++ < 20) {
-            try {
-                def req = HttpRequest.newBuilder(URI.create(baseUrl + "/")).timeout(Duration.ofSeconds(2)).GET().build()
-                def res = client.send(req, HttpResponse.BodyHandlers.ofString())
-                if (res.statusCode() >= 200 && res.statusCode() < 500) {
-                    return true
-                }
-            } catch (Exception ignored) { }
-            sleep(100)
+    def "getting complete configuration"() {
+        given:
+        def resultFile = new File('network-simulator-config.json')
+        if (resultFile.exists()) {
+            resultFile.delete()
         }
-        return false
+
+        when:
+        def reqConfig = HttpRequest.newBuilder(URI.create("${base}/api/v1/configuration"))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build()
+        def resConfig = client.send(reqConfig, HttpResponse.BodyHandlers.ofString())
+
+        def mapper = new ObjectMapper()
+        def jsonNode = mapper.readTree(resConfig.body())
+        def prettyJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode)
+
+        resultFile << prettyJson
+
+        then:
+        resultFile.exists()
     }
 
 }

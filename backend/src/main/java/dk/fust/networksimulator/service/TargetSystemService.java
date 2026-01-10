@@ -44,4 +44,9 @@ public class TargetSystemService {
     public void deleteTargetSystem(Long id) {
         targetSystemRepository.deleteById(id);
     }
+
+    public void deleteAllTargetSystems() {
+        targetSystemRepository.deleteAll();
+    }
+
 }

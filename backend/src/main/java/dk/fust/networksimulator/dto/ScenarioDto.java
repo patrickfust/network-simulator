@@ -38,8 +38,8 @@ public class ScenarioDto {
     @Schema(description = "HTTP status code to return", example = "200")
     private Integer statusCode;
 
-    @Schema(description = "Response body to return", example = "{\"result\":\"ok\"}")
-    private String responseBody;
+    @Schema(description = "Response body to return", example = "Some body")
+    private String bodyToReturn;
 
     @Schema(description = "Response timeout in milliseconds", example = "5000")
     private Long timeoutMs;

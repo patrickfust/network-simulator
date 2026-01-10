@@ -10,9 +10,9 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Response Body</mat-label>
-    <textarea matInput rows="15" formControlName="responseBody"></textarea>
-    @if (formGroup.get('responseBody')?.invalid && formGroup.get('responseBody')?.touched) {
-      <mat-error>{{ getErrorMessage('responseBody') }}</mat-error>
+    <textarea matInput rows="15" formControlName="bodyToReturn"></textarea>
+    @if (formGroup.get('bodyToReturn')?.invalid && formGroup.get('bodyToReturn')?.touched) {
+      <mat-error>{{ getErrorMessage('bodyToReturn') }}</mat-error>
     }
   </mat-form-field>
 

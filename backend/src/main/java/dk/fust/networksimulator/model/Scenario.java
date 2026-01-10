@@ -20,7 +20,7 @@ public class Scenario {
     @Column(name = "enable_scenario")
     private Boolean enableScenario = true;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column
@@ -35,8 +35,8 @@ public class Scenario {
     @Column(name = "status_code")
     private Integer statusCode;
 
-    @Column(name = "response_body")
-    private String responseBody;
+    @Column(name = "body_to_return")
+    private String bodyToReturn;
 
     @Column(name = "timeout_ms")
     private Long timeoutMs;
@@ -54,7 +54,7 @@ public class Scenario {
     @JoinColumn(name = "target_system_id")
     private TargetSystem targetSystem;
 
-    public Scenario(Long id, Boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String responseBody, Long timeoutMs, Boolean followRedirect) {
+    public Scenario(Long id, Boolean enableScenario, String name, String path, String description, Long latencyMs, Integer statusCode, String bodyToReturn, Long timeoutMs, Boolean followRedirect) {
         this.id = id;
         this.enableScenario = enableScenario;
         this.name = name;
@@ -62,7 +62,7 @@ public class Scenario {
         this.description = description;
         this.latencyMs = latencyMs;
         this.statusCode = statusCode;
-        this.responseBody = responseBody;
+        this.bodyToReturn = bodyToReturn;
         this.timeoutMs = timeoutMs;
         this.followRedirect = followRedirect;
     }

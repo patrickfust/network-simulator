@@ -26,10 +26,17 @@ public class ScenarioService {
         return scenarioRepository.findScenariosByPath(path, targetSystemId);
     }
 
+    public Optional<Scenario> findScenarioByName(String name) {
+        return scenarioRepository.findByName(name);
+    }
+
     public Scenario createScenario(Scenario scenario) {
         // Before saving, establish the bidirectional relationship
         if (scenario.getHeaders() != null) {
             scenario.getHeaders().forEach(header -> header.setScenario(scenario));
+        }
+        if (scenario.getBodyToReturn() != null && scenario.getBodyToReturn().isEmpty()) {
+            scenario.setBodyToReturn(null);
         }
         return scenarioRepository.save(scenario);
     }
@@ -43,12 +50,15 @@ public class ScenarioService {
         scenario.setDescription(scenarioDetails.getDescription());
         scenario.setLatencyMs(scenarioDetails.getLatencyMs());
         scenario.setStatusCode(scenarioDetails.getStatusCode());
-        scenario.setResponseBody(scenarioDetails.getResponseBody());
+        scenario.setBodyToReturn(scenarioDetails.getBodyToReturn());
         scenario.setTimeoutMs(scenarioDetails.getTimeoutMs());
         scenario.setFollowRedirect(scenarioDetails.getFollowRedirect());
         scenario.setTargetSystem(scenarioDetails.getTargetSystem());
         scenario.setResponseBytesPerSecond(scenarioDetails.getResponseBytesPerSecond());
         updateHeaders(scenarioDetails, scenario);
+        if (scenario.getBodyToReturn() != null && scenario.getBodyToReturn().isEmpty()) {
+            scenario.setBodyToReturn(null);
+        }
         return scenarioRepository.save(scenario);
     }
 
@@ -76,11 +86,14 @@ public class ScenarioService {
                             .ifPresent(existing -> {
                                 existing.setHeaderName(newHeader.getHeaderName());
                                 existing.setHeaderValue(newHeader.getHeaderValue());
-                                existing.setHeaderReplaceValue(newHeader.getHeaderReplaceValue());
+                                existing.setHeaderReplaceValue(newHeader.getHeaderReplaceValue() != null ? newHeader.getHeaderReplaceValue() : false);
                             });
                 } else {
                     // Add new header
                     newHeader.setScenario(scenario);
+                    if (newHeader.getHeaderReplaceValue() == null) {
+                        newHeader.setHeaderReplaceValue(false);
+                    }
                     scenario.getHeaders().add(newHeader);
                 }
             });
@@ -89,6 +102,10 @@ public class ScenarioService {
 
     public void deleteScenario(Long id) {
         scenarioRepository.deleteById(id);
+    }
+
+    public void deleteAllScenarios() {
+        scenarioRepository.deleteAll();
     }
 
 }

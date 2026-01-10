@@ -30,7 +30,7 @@ describe('ScenarioManager', () => {
       timeoutMs: 0,
       followRedirect: true,
       statusCode: 200,
-      responseBody: 'abc',
+      bodyToReturn: 'abc',
       latencyMs: 0,
       enableScenario: false,
       headers: [],

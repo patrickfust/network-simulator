@@ -1,20 +1,16 @@
-package dk.fust.networksimulator.dto;
+package dk.fust.networksimulator.dto.configuration;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Schema(description = "Target system configuration used by the network simulator")
-public class TargetSystemDto {
-
-    @Schema(description = "Database id of the target system", example = "42", accessMode = Schema.AccessMode.READ_ONLY)
-    private Long id;
+public class ConfigurationTargetSystemDto {
 
     @Schema(description = "Human readable system name", example = "payment-gateway", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
@@ -31,6 +27,6 @@ public class TargetSystemDto {
     private long timeoutMs;
 
     @Schema(description = "Whether to follow HTTP redirects or not", example = "true")
-    private boolean followRedirect = true;
+    private boolean followRedirect;
 
 }
