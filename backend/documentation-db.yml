@@ -69,6 +69,14 @@ tables:
         dataType: bool
         nullable: true
         comment: Whether to follow HTTP redirects for this scenario.
+      - name: target_system_id
+        dataType: int
+        nullable: true
+        foreignKey:
+          enforceReference: true
+          tableName: target_systems
+          columnName: id
+        comment: Identifier of the associated target system.
   - name: scenario_headers
     fields:
       - name: id

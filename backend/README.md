@@ -108,6 +108,7 @@ target_systems {
     BIGINT timeoutMs
     BOOL followRedirects
 }
+    target_systems ||--o{ scenarios : ""
 scenarios {
     INT id PK
     BOOL enable_scenario
@@ -119,6 +120,7 @@ scenarios {
     TEXT response_body
     BIGINT timeout_ms
     BOOL follow_redirects
+    INT target_system_id FK
 }
     scenarios ||--o{ scenario_headers : ""
 scenario_headers {
