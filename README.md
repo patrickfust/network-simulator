@@ -27,7 +27,7 @@ end
   yourApp --> third
 ```
 
-### Network Simulator as proxy
+## Network Simulator as proxy
 
 By using this network simulation application as a proxy,
 you can simulate these conditions without modifying your application or the third-party service.
@@ -47,6 +47,31 @@ networkSim --> third
 
 style networkSim stroke-width:3px
 ```
+
+## How to use Network Simulator
+
+Lets say you have an application that calls a third-party service at the URL: `https://payment-gateway.com/`.
+The payment gateway has an OpenAPI specification, where you have generated a client for it.
+
+It has an operation to list accounts on: `GET /v1/accounts`.
+
+You therefore have set a `baseURL` for you client to `https://payment-gateway.com` and the client can then call the operation with the full URL: `https://payment-gateway.com/v1/accounts`.
+
+### URL Structure for calling through Network Simulator
+
+To use the Network Simulator, you first need to define a target system in the Network Simulator UI.
+You can name it `payment-gateway` and set the target URL to `https://payment-gateway.com`.
+
+You must then change the `baseURL` of your client to point to the Network Simulator instead.
+
+Assuming the Network Simulator is running locally on port `9898`, you would set the `baseURL` to `http://localhost:9898/forward/payment-gateway`.
+
+So, by setting your client's `baseURL` to `http://localhost:9898/forward/payment-gateway`, all requests to the payment gateway will now go through the Network Simulator.
+You can then configure different network and the operation `GET /v1/accounts` will be called as `http://localhost:9898/forward/payment-gateway/v1/accounts`.
+
+The URL structure is as follows:
+
+![URL Structure](images/url-explanation.png)
 
 # Building and Running
 
@@ -201,7 +226,7 @@ Read more about the backend and how it works [here](backend)
 - **Communication**: RESTful APIs for backend interaction
 - **Dashboard**: Provides user interface for scenario management
 
-Read more about the frontend and how it works [here](backend)
+Read more about the frontend and how it works [here](frontend)
 
 # Bruno
 
