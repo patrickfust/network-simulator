@@ -10,11 +10,11 @@ import {UpdateTargetSystem} from './target-systems/update-target-system/update-t
 export const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'home', component: Home},
+  {path: 'target-systems/add', component: AddTargetSystem},
+  {path: 'target-systems/:id', component: UpdateTargetSystem},
   {path: 'target-systems', component: TargetSystemManagerComponent},
-  {path: 'add-target-system', component: AddTargetSystem},
-  {path: 'update-target-system/:id', component: UpdateTargetSystem},
+  {path: 'scenarios/add', component: AddScenario},
+  {path: 'scenarios/:id', component: UpdateScenario},
   {path: 'scenarios', component: ScenarioManager},
-  {path: 'add-scenario', component: AddScenario},
-  {path: 'update-scenario/:id', component: UpdateScenario},
   {path: '**', redirectTo: '/home'}
 ];

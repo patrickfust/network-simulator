@@ -16,6 +16,6 @@ export class App {
   protected readonly title = signal('network-simulator-frontend');
   constructor(private router: Router) {}
   isActive(route: string): boolean {
-    return this.router.url === route;
+    return this.router.url.startsWith(route);
   }
 }

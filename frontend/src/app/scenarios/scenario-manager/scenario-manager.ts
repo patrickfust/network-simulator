@@ -140,6 +140,6 @@ export class ScenarioManager implements AfterViewInit {
   }
 
   onRowClick(scenario: Scenario): void {
-    this.router.navigate(['/update-scenario', scenario.id]);
+    this.router.navigate(['/scenarios', scenario.id]);
   }
 }

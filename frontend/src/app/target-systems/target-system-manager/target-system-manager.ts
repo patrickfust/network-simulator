@@ -109,7 +109,7 @@ export class TargetSystemManagerComponent implements AfterViewInit {
 
   onRowClick(targetSystem: TargetSystem): void {
     console.log("Row clicked: ", targetSystem);
-    this.router.navigate(['/update-target-system', targetSystem.id]);
+    this.router.navigate(['/target-systems', targetSystem.id]);
   }
 
 }
