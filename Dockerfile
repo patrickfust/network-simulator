@@ -17,7 +17,7 @@ COPY --from=frontend-build /app/frontend/dist/network-simulator-frontend/* ./bac
 RUN cd backend && mvn package -DskipTests
 
 # Stage 3: Create the final image
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:25.0.1_8-jre-noble
 WORKDIR /app
 
 # Create a non-root user
