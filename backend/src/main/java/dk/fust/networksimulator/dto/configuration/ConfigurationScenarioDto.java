@@ -3,6 +3,7 @@ package dk.fust.networksimulator.dto.configuration;
 
 import dk.fust.networksimulator.dto.ScenarioHeaderDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -46,6 +47,7 @@ public class ConfigurationScenarioDto {
     private Boolean followRedirect;
 
     @Schema(description = "Headers to include in the response")
+    @Valid
     private List<ScenarioHeaderDto> headers = new ArrayList<>();
 
     @Schema(description = "Target system name", example = "payment-gateway")

@@ -2,6 +2,7 @@
 package dk.fust.networksimulator.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -48,6 +49,7 @@ public class ScenarioDto {
     private Boolean followRedirect;
 
     @Schema(description = "Headers to include in the response")
+    @Valid
     private List<ScenarioHeaderDto> headers = new ArrayList<>();
 
     @Schema(description = "Target system id", example = "42")
