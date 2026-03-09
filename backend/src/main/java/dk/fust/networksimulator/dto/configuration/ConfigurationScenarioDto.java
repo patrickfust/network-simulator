@@ -4,6 +4,8 @@ package dk.fust.networksimulator.dto.configuration;
 import dk.fust.networksimulator.dto.ScenarioHeaderDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -41,6 +43,8 @@ public class ConfigurationScenarioDto {
     private String bodyToReturn;
 
     @Schema(description = "Response timeout in milliseconds", example = "5000")
+    @Min(0)
+    @Max(300_000)
     private Long timeoutMs;
 
     @Schema(description = "Follow HTTP redirects", example = "false")

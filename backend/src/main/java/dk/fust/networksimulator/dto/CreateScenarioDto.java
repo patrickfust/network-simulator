@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class CreateScenarioDto {
     private String bodyToReturn;
 
     @Schema(description = "Response timeout in milliseconds", example = "5000")
+    @Min(0)
+    @Max(300_000)
     private Long timeoutMs;
 
     @Schema(description = "Whether to follow HTTP redirects", example = "false")

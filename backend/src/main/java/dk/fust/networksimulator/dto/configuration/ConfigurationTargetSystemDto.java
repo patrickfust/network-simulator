@@ -1,6 +1,7 @@
 package dk.fust.networksimulator.dto.configuration;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class ConfigurationTargetSystemDto {
 
     @Schema(description = "Request timeout in milliseconds", example = "5000")
     @Min(0)
+    @Max(300_000)
     private long timeoutMs;
 
     @Schema(description = "Whether to follow HTTP redirects or not", example = "true")
