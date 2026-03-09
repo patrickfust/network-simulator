@@ -7,6 +7,7 @@ import dk.fust.networksimulator.service.ConfigurationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class ConfigurationController {
 
     @Operation(summary = "Updates entire configuration")
     @PostMapping
-    public ResponseEntity<String> updateConfiguration(@RequestBody ConfigurationDto configurationDto,
+    public ResponseEntity<String> updateConfiguration(@Valid @RequestBody ConfigurationDto configurationDto,
                           @RequestParam(required = false) @Parameter(name = "deleteBeforeUpdate", description = "Deletes all existing target systems and scenarios will remove existing scenarios and target systems that are not in the configuration") Boolean deleteBeforeUpdate) {
         log.info("Updating configuration with {} target systems and {} scenarios. DeleteBeforeUpdate: {}",
                 configurationDto.getTargetSystems().size(),
