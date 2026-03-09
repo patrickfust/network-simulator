@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, DestroyRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {
   AbstractControl, FormArray,
   FormBuilder,
@@ -22,6 +22,7 @@ import {HeadersStepComponent} from './headers-step.component';
 import {TargetSystemService} from '../../services/target-system.service';
 import {TargetSystem} from '../../models/target-system';
 import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-scenario-form',
@@ -44,6 +45,7 @@ import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
 })
 export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChanges {
   readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
   targetSystemService = inject(TargetSystemService);
 
   @Input() scenario?: Scenario;
@@ -85,7 +87,9 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
   }
 
   ngOnInit(): void {
-    this.targetSystemService.getAllTargetSystems().subscribe({
+    this.targetSystemService.getAllTargetSystems().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: (systems) => {
         this.targetSystems = systems;
         if (this.scenario) {
@@ -243,7 +247,9 @@ export class ScenarioForm extends NetworkSimulatorForm implements OnInit, OnChan
       data: {scenario: this.scenario},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result !== undefined && result == true) {
         this.deleteScenarioSubmit.emit(this.scenario);
       }

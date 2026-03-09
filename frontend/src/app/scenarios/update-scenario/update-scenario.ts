@@ -23,9 +23,16 @@ export class UpdateScenario {
 
   constructor() {
     const scenarioId = Number(this.route.snapshot.params['id']);
-    this.scenarioService.getScenarioById(scenarioId).subscribe(scenario => {
-      console.log('Scenario loaded:', scenario);
-      this.scenario.set(scenario);
+    this.scenarioService.getScenarioById(scenarioId).subscribe({
+      next: (scenario) => {
+        console.log('Scenario loaded:', scenario);
+        this.scenario.set(scenario);
+      },
+      error: (err: Error) => {
+        console.error('Failed to load scenario:', err);
+        this.snackBar.open('Failed to load scenario', 'Close', {duration: 5000});
+        this.router.navigate(['/scenarios']);
+      },
     });
   }
 
