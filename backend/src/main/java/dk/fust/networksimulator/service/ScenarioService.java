@@ -2,6 +2,7 @@ package dk.fust.networksimulator.service;
 
 import dk.fust.networksimulator.model.Scenario;
 import dk.fust.networksimulator.repository.ScenarioRepository;
+import dk.fust.networksimulator.util.GlobMatcher;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,11 @@ public class ScenarioService {
     }
 
     public Optional<List<Scenario>> findScenariosByPath(String path, Long targetSystemId) {
-        return scenarioRepository.findScenariosByPath(path, targetSystemId);
+        List<Scenario> candidates = scenarioRepository.findEnabledScenariosByTargetSystem(targetSystemId);
+        List<Scenario> matched = candidates.stream()
+                .filter(s -> GlobMatcher.matches(s.getPath(), path))
+                .toList();
+        return Optional.of(matched);
     }
 
     public Optional<Scenario> findScenarioByName(String name) {
