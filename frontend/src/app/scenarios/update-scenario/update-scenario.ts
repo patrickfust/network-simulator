@@ -4,6 +4,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {ScenarioService} from '../../services/scenario.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Scenario} from '../../models/scenario';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-update-scenario',
@@ -28,9 +29,10 @@ export class UpdateScenario {
         console.log('Scenario loaded:', scenario);
         this.scenario.set(scenario);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load scenario:', err);
-        this.snackBar.open('Failed to load scenario', 'Close', {duration: 5000});
+        const message = err.error?.message || err.statusText || 'Failed to load scenario';
+        this.snackBar.open(message, 'Close', {duration: 5000});
         this.router.navigate(['/scenarios']);
       },
     });
@@ -44,9 +46,10 @@ export class UpdateScenario {
         this.snackBar.open('Scenario updated', 'Close', {duration: 3000});
         this.router.navigate(['/scenarios']);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Update failed:', err);
-        this.snackBar.open(err.message, 'Close', {duration: 5000});
+        const message = err.error?.message || err.statusText || 'Update failed';
+        this.snackBar.open(message, 'Close', {duration: 5000});
       },
     });
   }
@@ -60,9 +63,10 @@ export class UpdateScenario {
           this.snackBar.open('Scenario deleted', 'Close', {duration: 3000});
           this.router.navigate(['/scenarios']);
         },
-        error: (err: Error) => {
+        error: (err: HttpErrorResponse) => {
           console.error('Delete failed:', err);
-          this.snackBar.open(err.message, 'Close', {duration: 5000});
+          const message = err.error?.message || err.statusText || 'Delete failed';
+          this.snackBar.open(message, 'Close', {duration: 5000});
         },
       });
     }

@@ -5,6 +5,7 @@ import {ScenarioService} from '../../services/scenario.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {ScenarioForm} from '../scenario-form/scenario-form';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-add-scenario',
@@ -28,9 +29,10 @@ export class AddScenario {
         this.snackBar.open('Scenario created', 'Close', {duration: 3000});
         this.router.navigate(['/scenarios']);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Create failed:', err);
-        this.snackBar.open(err.message, 'Close', {duration: 5000});
+        const message = err.error?.message || err.statusText || 'Create failed';
+        this.snackBar.open(message, 'Close', {duration: 5000});
       },
     });
   }
