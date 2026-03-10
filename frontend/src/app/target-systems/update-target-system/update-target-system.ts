@@ -1,4 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
+import {HttpErrorResponse} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TargetSystemForm} from '../target-system-form/target-system-form';
@@ -28,7 +29,7 @@ export class UpdateTargetSystem {
         console.log('Target System loaded:', targetSystem);
         this.targetSystem.set(targetSystem);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Failed to load target system:', err);
         this.snackBar.open('Failed to load target system', 'Close', {duration: 5000});
         this.router.navigate(['/target-systems']);
@@ -44,9 +45,9 @@ export class UpdateTargetSystem {
         this.snackBar.open('TargetSystem updated', 'Close', {duration: 3000});
         this.router.navigate(['/target-systems']);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Update failed:', err);
-        this.snackBar.open(err.message, 'Close', {duration: 5000});
+        this.snackBar.open(err.error?.message ?? err.message, 'Close', {duration: 5000});
       },
     });
   }
@@ -60,9 +61,9 @@ export class UpdateTargetSystem {
           this.snackBar.open('Target System deleted', 'Close', {duration: 5000});
           this.router.navigate(['/target-systems']);
         },
-        error: (err: Error) => {
+        error: (err: HttpErrorResponse) => {
           console.error('Delete failed:', err);
-          this.snackBar.open(err.message, 'Close', {duration: 5000});
+          this.snackBar.open(err.error?.message ?? err.message, 'Close', {duration: 5000});
         },
       });
     }

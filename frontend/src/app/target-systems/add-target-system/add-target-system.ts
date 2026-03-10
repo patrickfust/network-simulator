@@ -1,5 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {HttpErrorResponse} from '@angular/common/http';
 import {TargetSystemService} from '../../services/target-system.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
@@ -28,9 +29,9 @@ export class AddTargetSystem {
         this.snackBar.open('Target System created', 'Close', {duration: 3000});
         this.router.navigate(['/target-systems']);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Create failed:', err);
-        this.snackBar.open(err.message, 'Close', {duration: 5000});
+        this.snackBar.open(err.error?.message ?? err.message, 'Close', {duration: 5000});
       },
     });
   }
