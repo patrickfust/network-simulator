@@ -28,10 +28,50 @@ public final class GlobMatcher {
         if (glob == null || glob.isEmpty()) {
             return true;
         }
-        String regex = globToRegex(glob);
-        return path != null && path.matches(regex);
+        if (path == null) {
+            return false;
+        }
+        return wildcardMatch(glob, path);
     }
 
+    /**
+     * Performs glob-style matching supporting '*' and '?' only.
+     * All other characters are treated literally.
+     */
+    private static boolean wildcardMatch(String pattern, String text) {
+        int p = 0;              // index in pattern
+        int t = 0;              // index in text
+        int starIndex = -1;     // most recent '*' position in pattern
+        int matchIndex = 0;     // index in text corresponding to starIndex + 1
+
+        while (t < text.length()) {
+            if (p < pattern.length()
+                    && (pattern.charAt(p) == '?' || pattern.charAt(p) == text.charAt(t))) {
+                // current characters match, or pattern has '?'
+                p++;
+                t++;
+            } else if (p < pattern.length() && pattern.charAt(p) == '*') {
+                // record position of '*' and the match position in text
+                starIndex = p;
+                matchIndex = t;
+                p++;
+            } else if (starIndex != -1) {
+                // backtrack: extend the match for the previous '*'
+                p = starIndex + 1;
+                matchIndex++;
+                t = matchIndex;
+            } else {
+                return false;
+            }
+        }
+
+        // consume remaining '*' in pattern
+        while (p < pattern.length() && pattern.charAt(p) == '*') {
+            p++;
+        }
+
+        return p == pattern.length();
+    }
     static String globToRegex(String glob) {
         StringBuilder sb = new StringBuilder("^");
         for (int i = 0; i < glob.length(); i++) {
