@@ -50,7 +50,7 @@ style networkSim stroke-width:3px
 
 ## How to use Network Simulator
 
-Lets say you have an application that calls a third-party service at the URL: `https://payment-gateway.com/`.
+Let's say you have an application that calls a third-party service at the URL: `https://payment-gateway.com/`.
 The payment gateway has an OpenAPI specification, where you have generated a client for it.
 
 It has an operation to list accounts on: `GET /v1/accounts`.
@@ -72,6 +72,13 @@ You can then configure different network and the operation `GET /v1/accounts` wi
 The URL structure is as follows:
 
 ![URL Structure](images/url-explanation.png)
+
+## Configuring simulation scenarios
+
+You may either configure simulation scenarios through the UI or by sending a POST request to the Network Simulator API.
+
+![](images/network-simulator-screenshot.png)
+
 
 # Building and Running
 
