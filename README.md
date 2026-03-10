@@ -77,7 +77,7 @@ The URL structure is as follows:
 
 You may either configure simulation scenarios through the UI or by sending a POST request to the Network Simulator API.
 
-![](images/network-simulator-screenshot.png)
+![Network Simulator UI](images/network-simulator-screenshot.png)
 
 
 # Building and Running

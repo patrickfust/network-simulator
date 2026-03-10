@@ -28,6 +28,9 @@ public class ScenarioService {
         List<Scenario> matched = candidates.stream()
                 .filter(s -> GlobMatcher.matches(s.getPath(), path))
                 .toList();
+        if (matched.isEmpty()) {
+            return Optional.empty();
+        }
         return Optional.of(matched);
     }
 
