@@ -23,9 +23,16 @@ export class UpdateTargetSystem {
 
   constructor() {
     const targetSystemId = Number(this.route.snapshot.params['id']);
-    this.targetSystemService.getTargetSystemById(targetSystemId).subscribe(targetSystem => {
-      console.log('Target System loaded:', targetSystem);
-      this.targetSystem.set(targetSystem);
+    this.targetSystemService.getTargetSystemById(targetSystemId).subscribe({
+      next: (targetSystem) => {
+        console.log('Target System loaded:', targetSystem);
+        this.targetSystem.set(targetSystem);
+      },
+      error: (err: Error) => {
+        console.error('Failed to load target system:', err);
+        this.snackBar.open('Failed to load target system', 'Close', {duration: 5000});
+        this.router.navigate(['/target-systems']);
+      },
     });
   }
 

@@ -12,9 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ScenarioRepository extends JpaRepository<Scenario, Long> {
 
-    @Query(value = "SELECT * FROM scenarios WHERE enable_scenario = true and (path is null or :path ~ REPLACE(REPLACE(path, '*', '.*'), '?', '.')) and (target_system_id is null or target_system_id = :targetSystemId)",
-            nativeQuery = true)
-    Optional<List<Scenario>> findScenariosByPath(@Param("path") String path, @Param("targetSystemId") Long targetSystemId);
+    @Query("SELECT s FROM Scenario s WHERE s.enableScenario = true AND (s.targetSystem IS NULL OR s.targetSystem.id = :targetSystemId)")
+    List<Scenario> findEnabledScenariosByTargetSystem(@Param("targetSystemId") Long targetSystemId);
 
     Optional<Scenario> findByName(String name);
 

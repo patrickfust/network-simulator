@@ -16,16 +16,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.3</version>
         <relativePath/>
     </parent>
 
     <properties>
         <java.version>25</java.version>
-        <spring.boot.version>4.0.0</spring.boot.version>
+        <spring.boot.version>4.0.3</spring.boot.version>
         <springdoc.openapi.version>3.0.0</springdoc.openapi.version>
         <spock.version>2.4-groovy-5.0</spock.version>
         <model-mapper.version>3.2.6</model-mapper.version>
+        <groovy.version>5.0.4</groovy.version>
     </properties>
 
     <dependencies>
@@ -140,7 +141,7 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>5.0.3</version>
+            <version>${groovy.version}</version>
             <scope>test</scope>
         </dependency>
 

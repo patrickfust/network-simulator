@@ -11,6 +11,7 @@ import dk.fust.networksimulator.service.ScenarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class ScenarioController {
     @Operation(summary = "Create a scenario",
             responses = {@ApiResponse(responseCode = "201", description = "Scenario successfully created")})
     @PostMapping
-    public ResponseEntity<ScenarioDto> createScenario(@RequestBody CreateScenarioDto scenarioDto) {
+    public ResponseEntity<ScenarioDto> createScenario(@Valid @RequestBody CreateScenarioDto scenarioDto) {
         Scenario scenario = modelMapper.map(scenarioDto, Scenario.class);
         Scenario createdScenario = scenarioService.createScenario(scenario);
         URI location = ServletUriComponentsBuilder
@@ -63,7 +64,7 @@ public class ScenarioController {
 
     @Operation(summary = "Update a specific scenario")
     @PutMapping("/{id}")
-    public ResponseEntity<ScenarioDto> updateScenario(@PathVariable Long id, @RequestBody ScenarioDto scenarioDetailsDto) {
+    public ResponseEntity<ScenarioDto> updateScenario(@PathVariable Long id, @Valid @RequestBody ScenarioDto scenarioDetailsDto) {
         try {
             Scenario scenarioDetails = modelMapper.map(scenarioDetailsDto, Scenario.class);
             if (!id.equals(scenarioDetails.getId())) {

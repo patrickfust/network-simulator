@@ -7,6 +7,7 @@ import dk.fust.networksimulator.service.TargetSystemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class TargetSystemController {
     @Operation(summary = "Create a target system",
             responses = {@ApiResponse(responseCode = "201", description = "Target system successfully created")})
     @PostMapping
-    public ResponseEntity<TargetSystemDto> createTargetSystem(@RequestBody CreateTargetSystemDto createTargetSystemDto) {
+    public ResponseEntity<TargetSystemDto> createTargetSystem(@Valid @RequestBody CreateTargetSystemDto createTargetSystemDto) {
         TargetSystem targetSystem = modelMapper.map(createTargetSystemDto, TargetSystem.class);
         TargetSystem createdTargetSystem = targetSystemService.createTargetSystem(targetSystem);
         URI location = ServletUriComponentsBuilder
@@ -70,7 +71,7 @@ public class TargetSystemController {
 
     @Operation(summary = "Update a specific target system")
     @PutMapping("/{id}")
-    public ResponseEntity<TargetSystemDto> updateTargetSystem(@PathVariable Long id, @RequestBody TargetSystemDto targetSystemDto) {
+    public ResponseEntity<TargetSystemDto> updateTargetSystem(@PathVariable Long id, @Valid @RequestBody TargetSystemDto targetSystemDto) {
         try {
             TargetSystem targetSystemDetails = modelMapper.map(targetSystemDto, TargetSystem.class);
             TargetSystem updatedTargetSystem = targetSystemService.updateTargetSystem(id, targetSystemDetails);

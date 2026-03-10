@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatButton} from '@angular/material/button';
 import {MatCard} from '@angular/material/card';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -8,6 +8,7 @@ import {MatList, MatListItem} from '@angular/material/list';
 import {DeleteTargetSystemDialog} from './dialog-delete-target-system';
 import {MatDialog} from '@angular/material/dialog';
 import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-target-system-form',
@@ -24,6 +25,7 @@ import {NetworkSimulatorForm} from '../../shared/forms/network-simulator-form';
 })
 export class TargetSystemForm extends NetworkSimulatorForm implements OnInit {
   readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
   @Input() targetSystem?: TargetSystem;
   @Input() submitButtonText: string = 'Submit';
   @Output() formSubmit = new EventEmitter<TargetSystem>();
@@ -130,7 +132,9 @@ export class TargetSystemForm extends NetworkSimulatorForm implements OnInit {
       data: {targetSystem: this.targetSystem},
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(result => {
       if (result !== undefined && result == true) {
         this.deleteTargetSystemSubmit.emit(this.targetSystem);
       }

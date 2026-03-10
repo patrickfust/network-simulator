@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 @Data
@@ -24,6 +25,7 @@ public class CreateTargetSystemDto {
 
     @Schema(description = "Request timeout in milliseconds", example = "5000")
     @Min(0)
+    @Max(300_000)
     private long timeoutMs;
 
     @Schema(description = "Whether to follow HTTP redirects", example = "true")
