@@ -1,11 +1,14 @@
 package dk.fust.networksimulator.util;
 
 /**
- * Safe glob-style path matching that supports {@code *} (any characters) and
+ * Glob-style path matching that supports {@code *} (any characters) and
  * {@code ?} (any single character) wildcards.
  *
  * <p>All regular-expression metacharacters in the pattern are escaped before
- * compilation, so a stored pattern can never cause ReDoS.</p>
+ * compilation so stored patterns are treated as literals with {@code *} and
+ * {@code ?} wildcards. Matching is still performed using Java's regular
+ * expression engine, so pathological patterns and very long inputs may
+ * still lead to slow matches.</p>
  */
 public final class GlobMatcher {
 
