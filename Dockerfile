@@ -1,5 +1,5 @@
 # Stage 1: Build the Angular application
-FROM node:24-alpine AS frontend-build
+FROM node:25-alpine AS frontend-build
 WORKDIR /app
 COPY frontend/package*.json ./frontend/
 RUN cd frontend && npm install
