@@ -1,8 +1,14 @@
 # Network Simulator
 
-![](logo/network-simulator-100.png)
+![Network Simulator logo](images/logo/network-simulator-100.png)
 
 ## Introduction
+
+_How does your application handle different network scenarios?_
+
+If your application calls out into the big world, you might want to know how it handles difference network scenarios.
+
+How does it handle latency? What happens if the third-party service is down? How does it react to different HTTP status codes?
 
 This application is designed to simulate various network conditions by acting as a proxy between clients and target services. 
 It allows users to configure scenarios such as latency, bandwidth limitations, HTTP status codes, and responses.

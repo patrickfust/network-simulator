@@ -19,7 +19,6 @@ class NetworkSimulatorContainerWithConfigurationSpec extends Specification {
             .withExposedPorts(9898)
             .withLogConsumer { logLine -> println("*** Network Simulator ***: ${logLine.utf8StringWithoutLineEnding}") }
 
-
     @Shared
     String host
 

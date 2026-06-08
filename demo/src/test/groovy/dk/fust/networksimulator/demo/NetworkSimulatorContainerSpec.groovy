@@ -57,7 +57,7 @@ class NetworkSimulatorContainerSpec extends Specification {
               "followRedirect": true,
               "systemName": "httpbin",
               "targetBaseUrl": "https://httpbin.org",
-              "timeoutMs": 1000
+              "timeoutMs": 30000
             }'''
 
         when:
@@ -86,7 +86,8 @@ class NetworkSimulatorContainerSpec extends Specification {
               "enableScenario": true,
               "followRedirect": true,
               "name": "Just for the test",
-              "targetSystemId": $targetSystemId
+              "targetSystemId": $targetSystemId,
+              "path": "/*"
             }
         """
 
